@@ -1,8 +1,15 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import SectionLabel from "@/components/ui/SectionLabel";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const FOUNDERS = [
   {
@@ -29,124 +36,192 @@ const FOUNDERS = [
 ];
 
 export default function MeetTheFounders() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-120px" });
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const svgPathRef = useRef<SVGPathElement>(null);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
 
-  const itemVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 40, 
-      scale: 0.96 
-    },
-    show: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1, 
-      transition: { 
-        duration: 0.8, 
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number]
-      } 
-    },
-  };
-
-  // Image rotation hover variant: 0° -> +4° -> -2° -> 0° over 500ms
-  const imageHoverVariants = {
-    initial: { scale: 1, rotate: 0 },
-    hover: {
-      scale: 1.05,
-      rotate: [0, 4, -2, 0],
-      transition: {
-        duration: 0.5,
-        ease: "easeInOut" as const,
-        times: [0, 0.3, 0.7, 1]
+      // Header reveal
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current,
+          { opacity: 0, y: 30, filter: "blur(6px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 80%",
+              once: true,
+            },
+          }
+        );
       }
-    }
-  };
+
+      // Sequential card reveal: each card 300ms apart
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return;
+        gsap.fromTo(
+          card,
+          {
+            opacity: 0,
+            y: 80,
+            filter: "blur(8px)",
+          },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.9,
+            ease: "power3.out",
+            delay: i * 0.3,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%",
+              once: true,
+            },
+          }
+        );
+      });
+
+      // SVG connecting path animation
+      if (svgPathRef.current) {
+        const pathLength = svgPathRef.current.getTotalLength();
+        gsap.set(svgPathRef.current, {
+          strokeDasharray: pathLength,
+          strokeDashoffset: pathLength,
+        });
+        gsap.to(svgPathRef.current, {
+          strokeDashoffset: 0,
+          duration: 2,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 75%",
+            once: true,
+          },
+        });
+      }
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <section 
-      ref={ref}
-      className="py-28 lg:py-36 bg-[#F8F8F6] border-t border-[#E8E8E4]"
+    <section
+      ref={sectionRef}
+      data-theme="dark"
+      className="relative py-28 lg:py-36 bg-transparent overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        
-        {/* Section Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20 text-center"
-        >
-          <SectionLabel label="WHO WE ARE" />
-          <h2 className="font-serif text-[36px] sm:text-[48px] leading-[1.1] tracking-[-0.02em] text-[#141412] max-w-xl mx-auto mt-4 font-normal">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 relative">
+        {/* Section Header */}
+        <div ref={headerRef} className="mb-20 text-center opacity-0">
+          <div className="flex justify-center">
+            <SectionLabel label="WHO WE ARE" />
+          </div>
+          <h2 className="font-serif text-[36px] sm:text-[48px] leading-[1.1] tracking-[-0.02em] text-white max-w-xl mx-auto mt-4 font-normal">
             Meet the engineers building your systems.
           </h2>
-        </motion.div>
+        </div>
+
+        {/* Connecting SVG Path */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 1200 600"
+            fill="none"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <path
+              ref={svgPathRef}
+              d="M200,300 C300,100 500,100 600,300 C700,500 900,500 1000,300"
+              stroke="rgba(232,80,10,0.4)"
+              strokeWidth="1.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
 
         {/* Founder Cards Grid */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "show" : "hidden"}
-          className="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto"
-        >
+        <div className="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto relative z-10">
           {FOUNDERS.map((founder, i) => (
-            <motion.div
+            <div
               key={i}
-              variants={itemVariants}
-              whileHover={{ y: -6, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
-              className="bg-gradient-to-b from-white to-white/[0.8] rounded-2xl p-10 border border-[#E8E8E4]/60 shadow-[0_4px_30px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-shadow duration-500 flex flex-col items-center text-center relative overflow-hidden group select-none cursor-default"
+              ref={(el) => {
+                cardsRef.current[i] = el;
+              }}
+              className="group relative opacity-0"
             >
-              {/* Subtle top edge gradient bar */}
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-[#E8500A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Profile Image - Target 120px-160px (Used 140px) */}
-              <div className="w-[140px] h-[140px] rounded-full overflow-hidden mb-8 border border-[#E8E8E4] group-hover:border-[#E8500A]/30 transition-colors duration-300 shadow-md">
-                <motion.img
-                  src={founder.image}
-                  alt={founder.name}
-                  variants={imageHoverVariants}
-                  initial="initial"
-                  whileHover="hover"
-                  className="w-full h-full object-cover origin-bottom"
-                />
-              </div>
-              
-              {/* Card Meta Content */}
-              <span className="font-mono text-[10px] tracking-[0.18em] text-[#E8500A] font-bold uppercase block mb-3">
-                {founder.role}
-              </span>
-              
-              <h3 className="font-sans text-[22px] font-bold text-[#141412] mb-1 tracking-tight">
-                {founder.name}
-              </h3>
-              
-              <p className="font-sans text-[13px] font-semibold text-[#8C8C85] mb-5">
-                {founder.background}
-              </p>
-              
-              {/* Subtle separator line */}
-              <div className="w-8 h-px bg-[#E8E8E4] mb-5" />
-              
-              {/* Credentials / Details */}
-              <p className="font-sans text-[14px] text-[#5A5A54] leading-relaxed max-w-[260px]">
-                {founder.credentials}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+              {/* Orange glow beneath card */}
+              <div
+                className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-24 rounded-full bg-[#E8500A] opacity-[0.05] blur-[40px] pointer-events-none"
+                aria-hidden="true"
+              />
 
+              {/* Card */}
+              <div className="relative bg-white/[0.03] border border-white/10 backdrop-blur-sm rounded-2xl p-10 flex flex-col items-center text-center transition-transform duration-500 hover:rotate-[3deg] cursor-default select-none">
+                {/* Profile Image with floating ring */}
+                <div className="relative w-[140px] h-[140px] mb-8">
+                  {/* Floating orange ring */}
+                  <div
+                    className="absolute -inset-3 rounded-full border border-[#FF5A1F]/30 pointer-events-none"
+                    style={{ animation: "founderRingSpin 20s linear infinite" }}
+                    aria-hidden="true"
+                  />
+                  {/* Image circle */}
+                  <div className="relative w-full h-full rounded-full overflow-hidden border border-white/10">
+                    <Image
+                      src={founder.image}
+                      alt={founder.name}
+                      width={140}
+                      height={140}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Role label */}
+                <span className="font-mono text-[10px] tracking-[0.18em] text-[#E8500A] font-bold uppercase block mb-3">
+                  {founder.role}
+                </span>
+
+                {/* Name */}
+                <h3 className="font-sans text-[22px] font-bold text-white mb-1 tracking-tight">
+                  {founder.name}
+                </h3>
+
+                {/* Background */}
+                <p className="font-sans text-[13px] font-semibold text-white/50 mb-5">
+                  {founder.background}
+                </p>
+
+                {/* Separator */}
+                <div className="w-8 h-px bg-white/10 mb-5" aria-hidden="true" />
+
+                {/* Credentials */}
+                <p className="font-sans text-[14px] text-white/70 leading-relaxed max-w-[260px]">
+                  {founder.credentials}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* Global keyframes for ring rotation */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes founderRingSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}} />
     </section>
   );
 }

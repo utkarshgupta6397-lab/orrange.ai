@@ -1,3 +1,4 @@
+import CinematicAboutWrapper from "@/components/about/CinematicAboutWrapper";
 import AboutHero from "@/components/about/AboutHero";
 import FounderTimeline from "@/components/about/FounderTimeline";
 import MeetTheFounders from "@/components/about/MeetTheFounders";
@@ -13,7 +14,7 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#FFFFFF]">
+    <CinematicAboutWrapper>
       <AboutHero />
       <FounderTimeline />
       <MeetTheFounders />
@@ -21,6 +22,6 @@ export default function AboutPage() {
       <WhatWeBelieve />
       <WhatWeBuild />
       <CTABanner />
-    </div>
+    </CinematicAboutWrapper>
   );
 }

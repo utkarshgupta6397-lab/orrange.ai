@@ -1,8 +1,14 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import SectionLabel from "@/components/ui/SectionLabel";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const BELIEFS = [
   {
@@ -24,82 +30,132 @@ const BELIEFS = [
 ];
 
 export default function WhatWeBelieve() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-120px" });
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
+  useGSAP(() => {
+    if (!headlineRef.current || !cardsRef.current) return;
+
+    // Headline entrance
+    gsap.from(headlineRef.current, {
+      opacity: 0,
+      x: -30,
+      filter: "blur(6px)",
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: headlineRef.current,
+        start: "top 80%",
+        once: true,
       },
-    },
-  };
+    });
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
-    show: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
-        duration: 0.7, 
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number]
-      } 
-    },
-  };
+    // Cards: slide up + border draw effect
+    const cards = cardsRef.current.querySelectorAll(".belief-card");
+    cards.forEach((card, i) => {
+      gsap.from(card, {
+        opacity: 0,
+        y: 40,
+        filter: "blur(6px)",
+        duration: 0.8,
+        delay: i * 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 75%",
+          once: true,
+        },
+      });
+
+      // Border draw: animate the SVG rect
+      const borderSvg = card.querySelector(".border-draw-rect") as SVGRectElement;
+      if (borderSvg) {
+        const perimeter = 2 * (borderSvg.getBBox().width + borderSvg.getBBox().height);
+        gsap.set(borderSvg, { strokeDasharray: perimeter, strokeDashoffset: perimeter });
+        gsap.to(borderSvg, {
+          strokeDashoffset: 0,
+          duration: 1.2,
+          delay: i * 0.15 + 0.3,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: cardsRef.current,
+            start: "top 75%",
+            once: true,
+          },
+        });
+      }
+    });
+  }, { scope: sectionRef });
 
   return (
-    <section 
-      ref={ref}
-      className="py-28 lg:py-36 bg-[#F8F8F6] border-t border-[#E8E8E4]"
+    <section
+      ref={sectionRef}
+      data-theme="dark"
+      className="py-28 lg:py-36 relative overflow-hidden"
+      style={{ backgroundColor: "transparent" }}
     >
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        
+
         <div className="grid lg:grid-cols-[40fr_60fr] gap-16 lg:gap-20 items-start">
-          
+
           {/* Headline Left */}
-          <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div ref={headlineRef}>
             <SectionLabel label="OUR TENETS" />
-            <h2 className="font-serif text-[36px] sm:text-[44px] leading-[1.1] tracking-[-0.02em] text-[#141412] mt-4 mb-6 font-normal">
+            <h2 className="font-serif text-[36px] sm:text-[44px] leading-[1.1] tracking-[-0.02em] text-white mt-4 mb-6 font-normal">
               How We Build.
             </h2>
-            <p className="font-sans text-[16px] text-[#5A5A54] leading-relaxed max-w-sm">
+            <p className="font-sans text-[16px] text-white/50 leading-relaxed max-w-sm">
               We operate as a technical studio with strong opinions on how software should be built and delivered.
             </p>
-          </motion.div>
+          </div>
 
           {/* Tenets Cards Right */}
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? "show" : "hidden"}
-            className="grid sm:grid-cols-2 gap-6"
-          >
+          <div ref={cardsRef} className="grid sm:grid-cols-2 gap-6">
             {BELIEFS.map((belief, i) => (
-              <motion.div
+              <div
                 key={i}
-                variants={itemVariants}
-                whileHover={{ y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
-                className="bg-gradient-to-b from-white to-white/[0.8] p-8 rounded-xl border border-[#E8E8E4]/60 shadow-[0_4px_24px_rgba(0,0,0,0.01)] hover:shadow-[0_16px_40px_rgba(232,80,10,0.04)] transition-all duration-500 relative overflow-hidden select-none cursor-default group"
+                className="belief-card relative p-8 rounded-xl bg-white/[0.03] backdrop-blur-sm cursor-default group overflow-hidden transition-all duration-500 hover:bg-white/[0.06] hover:-translate-y-1"
               >
+                {/* SVG Border Draw */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none rounded-xl" preserveAspectRatio="none">
+                  <rect
+                    className="border-draw-rect"
+                    x="0.5"
+                    y="0.5"
+                    width="calc(100% - 1px)"
+                    height="calc(100% - 1px)"
+                    rx="12"
+                    fill="none"
+                    stroke="rgba(232,80,10,0.3)"
+                    strokeWidth="1"
+                  />
+                </svg>
+
+                {/* Static border fallback */}
+                <div className="absolute inset-0 rounded-xl border border-white/10 pointer-events-none" />
+
+                {/* Hover energy gradient on border */}
+                <div
+                  className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(232,80,10,0.15) 0%, transparent 50%, rgba(232,80,10,0.08) 100%)",
+                  }}
+                />
+
                 {/* Clean left accent stripe */}
-                <span className="absolute top-0 bottom-0 left-0 w-[3px] bg-[#E8500A] opacity-20 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                <h3 className="font-sans text-[18px] font-bold text-[#141412] mb-3 tracking-tight group-hover:text-[#E8500A] transition-colors duration-200">
+                <span className="absolute top-0 bottom-0 left-0 w-[3px] bg-[#E8500A] opacity-20 group-hover:opacity-100 transition-opacity duration-300 rounded-l-xl" />
+
+                <h3 className="font-sans text-[18px] font-bold text-white mb-3 tracking-tight group-hover:text-[#FF5A1F] transition-colors duration-200 relative z-10">
                   {belief.title}
                 </h3>
-                
-                <p className="font-sans text-[14px] text-[#5A5A54] leading-relaxed">
+
+                <p className="font-sans text-[14px] text-white/50 leading-relaxed relative z-10">
                   {belief.desc}
                 </p>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
 
