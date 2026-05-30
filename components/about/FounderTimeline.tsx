@@ -41,10 +41,10 @@ function EnergyParticles({ direction = "horizontal" }: { direction?: "horizontal
   const viewBox = isHorizontal ? "0 0 1200 2" : "0 0 2 800";
 
   const particles = [
-    { delay: "0s", dur: "4s", r: 2.5, opacity: 0.9 },
-    { delay: "1s", dur: "5s", r: 2, opacity: 0.7 },
-    { delay: "2.2s", dur: "4.5s", r: 1.5, opacity: 0.8 },
-    { delay: "3.4s", dur: "6s", r: 2, opacity: 0.6 },
+    { delay: "0s", dur: "4s", r: 3, opacity: 1 },
+    { delay: "1s", dur: "5s", r: 2.5, opacity: 0.85 },
+    { delay: "2.2s", dur: "4.5s", r: 2, opacity: 0.95 },
+    { delay: "3.4s", dur: "6s", r: 2.5, opacity: 0.8 },
   ];
 
   return (
@@ -111,9 +111,9 @@ export default function FounderTimeline() {
 
       // Set initial states
       gsap.set(cards, {
-        opacity: 0.2,
+        opacity: 0.5,
         scale: 0.95,
-        filter: "blur(10px)",
+        filter: "blur(4px)",
       });
 
       gsap.set(dots, {
@@ -198,7 +198,7 @@ export default function FounderTimeline() {
           tl.to(
             cards[i - 1],
             {
-              opacity: 0.5,
+              opacity: 0.65,
               boxShadow: "0 0 0px rgba(255,90,31,0)",
               duration: 0.15,
               ease: "power2.out",
@@ -235,10 +235,10 @@ export default function FounderTimeline() {
 
       // Initial states
       gsap.set(cards, {
-        opacity: 0,
-        y: 40,
+        opacity: 0.5,
+        y: 20,
         scale: 0.96,
-        filter: "blur(8px)",
+        filter: "blur(4px)",
       });
 
       gsap.set(dots, {
@@ -309,21 +309,21 @@ export default function FounderTimeline() {
           <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#E8500A] uppercase block mb-3">
             OUR JOURNEY
           </span>
-          <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal">
+          <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal opacity-90">
             How BITS Pilani computer labs led to building XYZ Labs.
           </h2>
         </div>
 
         {/* ── DESKTOP HORIZONTAL TIMELINE ── */}
-        <div ref={desktopWrapRef} className="hidden md:block relative w-full h-[520px]">
+        <div ref={desktopWrapRef} className="hidden md:block relative w-full h-[900px]">
           {/* Horizontal connection line track */}
-          <div className="absolute left-[6%] right-[6%] top-[260px] h-[2px] bg-white/5 z-0">
+          <div className="absolute left-[6%] right-[6%] top-[450px] h-[2px] bg-white/10 z-0">
             <div
               ref={desktopLineRef}
               className="h-full bg-gradient-to-r from-[#E8500A] via-[#FF5A1F] to-[#E8500A]"
               style={{
                 width: "0%",
-                boxShadow: "0 0 12px rgba(232,80,10,0.4)",
+                boxShadow: "0 0 20px rgba(232,80,10,0.6)",
               }}
             />
             {/* Energy particles flowing along the line */}
@@ -340,7 +340,7 @@ export default function FounderTimeline() {
                   className="relative flex flex-col items-center justify-center h-full"
                 >
                   {/* Glowing dot on the timeline */}
-                  <div className="absolute top-[260px] -translate-y-1/2 z-20">
+                  <div className="absolute top-[450px] -translate-y-1/2 z-20">
                     <div
                       ref={(el) => { desktopDotsRef.current[index] = el; }}
                       className="w-4 h-4 rounded-full bg-[#141412] border-2 border-[#E8500A] relative flex items-center justify-center"
@@ -359,11 +359,11 @@ export default function FounderTimeline() {
                   <div
                     ref={(el) => { desktopCardsRef.current[index] = el; }}
                     className={`absolute w-full px-2 ${
-                      isHigher ? "bottom-[280px]" : "top-[280px]"
+                      isHigher ? "bottom-[480px]" : "top-[480px]"
                     }`}
                     style={{
-                      opacity: 0.2,
-                      filter: "blur(10px)",
+                      opacity: 0.5,
+                      filter: "blur(4px)",
                       transform: "scale(0.95)",
                       willChange: "transform, opacity, filter",
                     }}
@@ -444,9 +444,9 @@ export default function FounderTimeline() {
                   className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm"
                   style={{
                     backgroundColor: "rgba(255,255,255,0.02)",
-                    opacity: 0,
-                    filter: "blur(8px)",
-                    transform: "translateY(40px) scale(0.96)",
+                    opacity: 0.5,
+                    filter: "blur(4px)",
+                    transform: "translateY(20px) scale(0.96)",
                     willChange: "transform, opacity, filter",
                   }}
                 >

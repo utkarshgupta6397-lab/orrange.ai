@@ -49,7 +49,7 @@ export default function MeetTheFounders() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 30, filter: "blur(6px)" },
+          { opacity: 0.75, y: 30, filter: "blur(4px)" },
           {
             opacity: 1,
             y: 0,
@@ -71,9 +71,9 @@ export default function MeetTheFounders() {
         gsap.fromTo(
           card,
           {
-            opacity: 0,
-            y: 80,
-            filter: "blur(8px)",
+            opacity: 0.7,
+            y: 40,
+            filter: "blur(4px)",
           },
           {
             opacity: 1,

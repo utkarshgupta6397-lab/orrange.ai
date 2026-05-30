@@ -39,9 +39,9 @@ export default function WhatWeBelieve() {
 
     // Headline entrance
     gsap.from(headlineRef.current, {
-      opacity: 0,
+      opacity: 0.75,
       x: -30,
-      filter: "blur(6px)",
+      filter: "blur(4px)",
       duration: 1,
       ease: "power3.out",
       scrollTrigger: {
@@ -55,9 +55,9 @@ export default function WhatWeBelieve() {
     const cards = cardsRef.current.querySelectorAll(".belief-card");
     cards.forEach((card, i) => {
       gsap.from(card, {
-        opacity: 0,
+        opacity: 0.5,
         y: 40,
-        filter: "blur(6px)",
+        filter: "blur(4px)",
         duration: 0.8,
         delay: i * 0.15,
         ease: "power3.out",

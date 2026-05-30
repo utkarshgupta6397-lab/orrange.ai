@@ -35,7 +35,7 @@ export default function WhyWeStarted() {
       ...(p2Split.words || []),
       ...(p3Split.words || []),
     ];
-    gsap.set(allWords, { opacity: 0.12, filter: "blur(2px)" });
+    gsap.set(allWords, { opacity: 0.5, filter: "blur(2px)" });
 
     // Helper: mark emphasis words with orange flash
     const revealWords = (words: HTMLElement[], triggerEl: HTMLElement, start: string, end: string) => {

@@ -40,8 +40,9 @@ export default function WhatWeBuild() {
     const pills = pillsRef.current.querySelectorAll(".cap-pill");
     pills.forEach((pill, i) => {
       gsap.from(pill, {
-        opacity: 0,
+        opacity: 0.5,
         y: 20,
+        filter: "blur(4px)",
         scale: 0.9,
         duration: 0.6,
         delay: i * 0.08,

@@ -27,8 +27,8 @@ export default function AboutHero() {
 
       // ── Initial state: dimmed, blurred, slightly scaled down ──
       gsap.set(split.lines, {
-        opacity: 0.15,
-        filter: "blur(12px)",
+        opacity: 0.5,
+        filter: "blur(4px)",
         scale: 0.97,
         y: 15,
         willChange: "transform, opacity, filter",
@@ -56,7 +56,7 @@ export default function AboutHero() {
         gsap.set(subContentRef.current, {
           opacity: 0,
           y: 30,
-          filter: "blur(8px)",
+          filter: "blur(4px)",
         });
 
         gsap.to(subContentRef.current, {
@@ -94,7 +94,7 @@ export default function AboutHero() {
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full pointer-events-none z-0"
         style={{
           background:
-            "radial-gradient(circle, rgba(232,80,10,0.08) 0%, rgba(232,80,10,0.03) 50%, transparent 70%)",
+            "radial-gradient(circle, rgba(232,80,10,0.12) 0%, rgba(232,80,10,0.05) 50%, transparent 70%)",
           filter: "blur(140px)",
         }}
         animate={{
