@@ -15,29 +15,26 @@ const EMPHASIS_WORDS = ["systems", "operations", "outcomes", "software", "owners
 export default function WhyWeStarted() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLHeadingElement>(null);
-  const para1Ref = useRef<HTMLParagraphElement>(null);
-  const para2Ref = useRef<HTMLParagraphElement>(null);
-  const para3Ref = useRef<HTMLParagraphElement>(null);
+  const parasRef = useRef<HTMLParagraphElement[]>([]);
 
   useGSAP(() => {
-    if (!quoteRef.current || !para1Ref.current || !para2Ref.current || !para3Ref.current) return;
+    if (!quoteRef.current || parasRef.current.length === 0) return;
 
-    // Split all text elements into words
     const quoteSplit = new SplitType(quoteRef.current, { types: "words" });
-    const p1Split = new SplitType(para1Ref.current, { types: "words" });
-    const p2Split = new SplitType(para2Ref.current, { types: "words" });
-    const p3Split = new SplitType(para3Ref.current, { types: "words" });
+    const splits: SplitType[] = [];
+    
+    const allWords = [...(quoteSplit.words || [])];
 
-    // Set all words to dim
-    const allWords = [
-      ...(quoteSplit.words || []),
-      ...(p1Split.words || []),
-      ...(p2Split.words || []),
-      ...(p3Split.words || []),
-    ];
+    parasRef.current.forEach(para => {
+      const split = new SplitType(para, { types: "words" });
+      splits.push(split);
+      if (split.words) {
+        allWords.push(...split.words);
+      }
+    });
+
     gsap.set(allWords, { opacity: 0.75, filter: "blur(2px)" });
 
-    // Helper: mark emphasis words with orange flash
     const revealWords = (words: HTMLElement[], triggerEl: HTMLElement, start: string, end: string) => {
       words.forEach((word, i) => {
         const text = word.textContent?.toLowerCase().replace(/[^a-z]/g, "") || "";
@@ -70,31 +67,19 @@ export default function WhyWeStarted() {
       });
     };
 
-    // Quote reveal
     if (quoteSplit.words) {
       revealWords(quoteSplit.words, quoteRef.current, "top 85%", "top 45%");
     }
 
-    // Paragraph 1
-    if (p1Split.words) {
-      revealWords(p1Split.words, para1Ref.current, "top 85%", "top 50%");
-    }
-
-    // Paragraph 2
-    if (p2Split.words) {
-      revealWords(p2Split.words, para2Ref.current, "top 85%", "top 50%");
-    }
-
-    // Paragraph 3
-    if (p3Split.words) {
-      revealWords(p3Split.words, para3Ref.current, "top 85%", "top 50%");
-    }
+    parasRef.current.forEach((para, idx) => {
+      if (splits[idx].words) {
+        revealWords(splits[idx].words, para, "top 85%", "top 50%");
+      }
+    });
 
     return () => {
       quoteSplit.revert();
-      p1Split.revert();
-      p2Split.revert();
-      p3Split.revert();
+      splits.forEach(split => split.revert());
     };
   }, { scope: sectionRef });
 
@@ -139,28 +124,50 @@ export default function WhyWeStarted() {
 
         {/* NARRATIVE LAYOUT */}
         <div className="grid sm:grid-cols-2 gap-10 max-w-3xl mx-auto border-t border-white/20 pt-12 relative z-10">
-          <p
-            ref={para1Ref}
-            className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
-          >
-            Before starting XYZ Labs, we worked on systems scaling to millions of users. What surprised us was what happened behind the scenes: even the most successful companies were held together by manual data entry, disconnected tools, and fragile spreadsheets.
-          </p>
+          {/* LEFT COLUMN */}
           <div className="space-y-6">
             <p
-              ref={para2Ref}
+              ref={(el) => { if (el) parasRef.current[0] = el; }}
               className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
             >
-              We realized that most software agencies are incentivized to sell hours, not outcomes. They build what they&apos;re told, collect their fees, and leave teams to deal with systems that don&apos;t actually automate the work.
+              Before starting XYZ Labs, we worked on products and systems serving millions of users. The technology was impressive, but what stood out was something else: behind many successful businesses were teams still relying on spreadsheets, manual coordination, and disconnected software to keep operations running.
             </p>
             <p
-              ref={para3Ref}
+              ref={(el) => { if (el) parasRef.current[1] = el; }}
+              className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
+            >
+              We repeatedly saw companies invest heavily in large ERP platforms, only to use a small fraction of what they paid for. The software dictated how teams should work, while the actual operational challenges that made each business unique were left unsolved.
+            </p>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="space-y-6">
+            <p
+              ref={(el) => { if (el) parasRef.current[2] = el; }}
+              className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
+            >
+              Traditional enterprise software was built around standardization. Modern businesses need adaptability.
+            </p>
+            <p
+              ref={(el) => { if (el) parasRef.current[3] = el; }}
+              className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
+            >
+              Most businesses pay for 100% of an ERP but actively use less than 20% of it. The remaining 80% adds complexity, training overhead, and rigid processes that teams learn to work around rather than benefit from.
+            </p>
+            <p
+              ref={(el) => { if (el) parasRef.current[4] = el; }}
+              className="font-sans text-[16px] leading-relaxed font-semibold text-[#FF5A1F]"
+            >
+              AI is only as powerful as the workflows beneath it.
+            </p>
+            <p
+              ref={(el) => { if (el) parasRef.current[5] = el; }}
               className="font-sans text-[16px] leading-relaxed font-semibold text-white"
             >
-              We started XYZ Labs to do the opposite. We act as an extension of your operations team, building bespoke software that entirely eliminates bottlenecks.
+              That&apos;s why we build AI-native operational systems that connect data, automate decisions, and remove repetitive work—so businesses can scale without increasing complexity.
             </p>
           </div>
         </div>
-
       </div>
     </section>
   );

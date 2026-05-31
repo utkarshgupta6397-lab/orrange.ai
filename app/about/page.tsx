@@ -4,7 +4,6 @@ import FounderTimeline from "@/components/about/FounderTimeline";
 import MeetTheFounders from "@/components/about/MeetTheFounders";
 import WhyWeStarted from "@/components/about/WhyWeStarted";
 import WhatWeBelieve from "@/components/about/WhatWeBelieve";
-import WhatWeBuild from "@/components/about/WhatWeBuild";
 import StoryProgress from "@/components/about/StoryProgress";
 import CTABanner from "@/components/sections/CTABanner";
 
@@ -21,14 +20,7 @@ export default function AboutPage() {
       <FounderTimeline />
       <MeetTheFounders />
       <WhyWeStarted />
-      <WhatWeBelieve />
-      <WhatWeBuild />
-      
-      {/* Footer Transition: Fades the dark theme into the light footer */}
-      <div className="w-full h-32 bg-gradient-to-b from-transparent to-white" />
-      <div className="bg-white">
-        <CTABanner />
-      </div>
+      <CTABanner />
     </CinematicAboutWrapper>
   );
 }
