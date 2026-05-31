@@ -156,25 +156,25 @@ export default function Process() {
             delay: 0.5, 
             ease: [0.16, 1, 0.3, 1] as [number, number, number, number] 
           }}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-10"
+          className="flex flex-col items-center justify-center gap-5 pt-10"
           style={{ borderTop: "1px solid #E8E8E4" }}
         >
-          <p className="font-sans text-[15px]" style={{ color: "#5A5A54" }}>
-            Ready to design your system architecture?
+          <p className="font-sans text-[16px] font-bold text-center" style={{ color: "#141412" }}>
+            Want to see who's building your systems?
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <a
+              href="/about#founders"
+              className="flex justify-center items-center gap-2 font-sans text-[13px] font-bold h-11 px-6 rounded-lg cursor-pointer transition-all active:scale-[0.98] bg-[#141412] border border-[#2A2A28] text-white hover:bg-[#2A2A28] w-full sm:w-auto"
+            >
+              Meet The Founders
+            </a>
             <button
               onClick={() => scrollTo("#contact")}
-              className="flex items-center gap-2 font-sans text-[13px] font-bold h-11 px-6 rounded-lg cursor-pointer transition-all active:scale-[0.98] bg-[#E8500A] text-white hover:bg-[#D04508]"
+              className="flex justify-center items-center gap-2 font-sans text-[13px] font-bold h-11 px-6 rounded-lg cursor-pointer transition-all active:scale-[0.98] bg-[#E8500A] text-white hover:bg-[#D04508] shadow-[0_4px_14px_rgba(232,80,10,0.25)] w-full sm:w-auto"
             >
-              Book a Discovery Call
+              Book A Discovery Call
               <span aria-hidden="true">→</span>
-            </button>
-            <button
-              onClick={() => scrollTo("#contact")}
-              className="flex items-center gap-1.5 font-sans text-[13px] font-bold h-11 px-4 cursor-pointer text-[#5A5A54] hover:text-[#E8500A] transition-colors"
-            >
-              Or send us a message
             </button>
           </div>
         </motion.div>
