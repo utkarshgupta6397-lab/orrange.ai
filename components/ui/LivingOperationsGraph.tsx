@@ -85,7 +85,6 @@ export default function LivingOperationsGraph() {
     if (!svgRef.current || !cardRef.current) return;
     
     const svgRect = svgRef.current.getBoundingClientRect();
-    const cardRect = cardRef.current.getBoundingClientRect();
 
     if (svgRect.width === 0 || svgRect.height === 0) return;
 

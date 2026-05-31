@@ -5,7 +5,6 @@ import { motion, useSpring, useTransform, AnimatePresence } from "framer-motion"
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import SplitType from "split-type";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

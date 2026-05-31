@@ -160,7 +160,7 @@ export default function Process() {
           style={{ borderTop: "1px solid #E8E8E4" }}
         >
           <p className="font-sans text-[16px] font-bold text-center" style={{ color: "#141412" }}>
-            Want to see who's building your systems?
+            Want to see who&apos;s building your systems?
           </p>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <a

@@ -3,7 +3,6 @@ import AboutHero from "@/components/about/AboutHero";
 import FounderTimeline from "@/components/about/FounderTimeline";
 import MeetTheFounders from "@/components/about/MeetTheFounders";
 import WhyWeStarted from "@/components/about/WhyWeStarted";
-import WhatWeBelieve from "@/components/about/WhatWeBelieve";
 import StoryProgress from "@/components/about/StoryProgress";
 import CTABanner from "@/components/sections/CTABanner";
 
