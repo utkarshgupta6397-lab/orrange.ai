@@ -12,28 +12,28 @@ if (typeof window !== "undefined") {
 const TIMELINE_EVENTS = [
   {
     year: "2018",
-    title: "Met at BITS Pilani",
-    desc: "We met in the computer labs at BITS Pilani. While other students were building basic projects, we spent our nights writing automation scripts for campus workflows and building early SaaS prototypes together.",
-  },
-  {
-    year: "2020",
-    title: "Separate Paths, Similar Problems",
-    desc: "After graduation, we went separate ways — joining high-growth startups like Stripe and Linear, or consulting for large enterprises. No matter where we worked, we kept seeing the exact same pattern.",
+    title: "Shared Beginning",
+    desc: "Met at BITS Pilani and built a shared foundation in engineering, technology, and problem solving.",
   },
   {
     year: "2022",
-    title: "The Enterprise Bottleneck",
-    desc: "We realized that most companies aren't held back by a lack of ideas. They are held back by operational drag: spreadsheets that don't sync, manual data entry, and off-the-shelf software that doesn't fit their actual workflows.",
+    title: "Different Paths",
+    desc: "Graduated and entered product, consulting, finance, and software roles across different industries.",
   },
   {
     year: "2024",
-    title: "Reunited to Build XYZ",
-    desc: "We quit our jobs and reunited to start XYZ Labs. We wanted to build a different kind of company — a software studio that acts as a technical partner, building bespoke systems that eliminate bottlenecks and give teams their time back.",
+    title: "The Idea Takes Shape",
+    desc: "Recognized a common pattern: businesses needed software that adapted to operations, not the other way around.",
   },
   {
     year: "2025",
-    title: "Scaling The Vision",
-    desc: "Partnering with growing enterprises to architect systems that scale with their ambitions. Turning operations into a competitive advantage.",
+    title: "From Ideas To Experiments",
+    desc: "Started validating workflow ideas through small-scale automation systems and real operational use cases.",
+  },
+  {
+    year: "2026",
+    title: "Building XYZ Labs",
+    desc: "Combined collective experience to build AI-powered systems that help businesses operate and scale more effectively.",
   },
 ];
 
@@ -88,11 +88,13 @@ export default function FounderTimeline() {
   const desktopCardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const desktopDotsRef = useRef<(HTMLDivElement | null)[]>([]);
   const desktopYearsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const desktopGlowsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const mobileWrapRef = useRef<HTMLDivElement>(null);
   const mobileLineRef = useRef<HTMLDivElement>(null);
   const mobileCardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const mobileDotsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileGlowsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -111,27 +113,20 @@ export default function FounderTimeline() {
       const cards = desktopCardsRef.current.filter(Boolean) as HTMLDivElement[];
       const dots = desktopDotsRef.current.filter(Boolean) as HTMLDivElement[];
       const years = desktopYearsRef.current.filter(Boolean) as HTMLSpanElement[];
+      const glows = desktopGlowsRef.current.filter(Boolean) as HTMLDivElement[];
       const line = desktopLineRef.current;
       if (!section || cards.length === 0 || !line) return;
 
       // Set initial states
       gsap.set(cards, {
-        opacity: 0.6,
+        opacity: 0.85,
         scale: 0.95,
       });
-
-      gsap.set(dots, {
-        scale: 0,
-        opacity: 0,
-      });
-
-      gsap.set(line, {
-        width: "0%",
-      });
-
-      gsap.set(years, {
-        color: "rgba(255,255,255,0.3)",
-      });
+      
+      gsap.set(glows, { opacity: 0 });
+      gsap.set(dots, { scale: 0, opacity: 0 });
+      gsap.set(line, { width: "0%" });
+      gsap.set(years, { color: "rgba(255,255,255,0.3)" });
 
       // Master timeline pinned to section scroll
       const tl = gsap.timeline({
@@ -144,58 +139,52 @@ export default function FounderTimeline() {
         },
       });
 
-      // Animate the connection line first
-      tl.to(
-        line,
-        {
-          width: "100%",
-          duration: 0.5,
-          ease: "none",
-        },
-        0
-      );
+      // Animate the connection line stretching across from 0 to 1
+      tl.to(line, { width: "100%", duration: 1, ease: "none" }, 0);
 
-      // Stagger each card into focus
+      // Stagger each card into focus perfectly synchronized with the line
       cards.forEach((card, i) => {
-        const startTime = 0.1 + i * (1 / cards.length);
+        // Dot appears exactly when the line reaches its physical center in the grid
+        const startTime = (i + 0.5) / cards.length;
 
         // Dot appears
         tl.to(
           dots[i],
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.08,
-            ease: "back.out(2)",
-          },
+          { scale: 1, opacity: 1, duration: 0.05, ease: "back.out(2)" },
           startTime
         );
 
-        // Card snaps into focus
+        // Card snaps into focus and dispatches event
         tl.to(
           card,
           {
             opacity: 1,
             scale: 1.04,
             borderColor: "rgba(255,90,31,0.5)",
-            boxShadow: "0 0 40px rgba(255,90,31,0.2), 0 0 80px rgba(255,90,31,0.1)",
             duration: 0.15,
             ease: "power2.out",
+            onStart: () => {
+              window.dispatchEvent(new CustomEvent("journey-step", { detail: TIMELINE_EVENTS[i].year }));
+            },
+            onReverseComplete: () => {
+              if (i > 0) {
+                window.dispatchEvent(new CustomEvent("journey-step", { detail: TIMELINE_EVENTS[i - 1].year }));
+              } else {
+                window.dispatchEvent(new CustomEvent("journey-step", { detail: "Journey" }));
+              }
+            }
           },
           startTime
         );
 
+        // Reveal radial glow
+        if (glows[i]) {
+          tl.to(glows[i], { opacity: 1, duration: 0.15, ease: "power2.out" }, startTime);
+        }
+
         // Year becomes bright orange
         if (years[i]) {
-          tl.to(
-            years[i],
-            {
-              color: "#FF5A1F",
-              duration: 0.1,
-              ease: "none",
-            },
-            startTime
-          );
+          tl.to(years[i], { color: "#FF5A1F", duration: 0.1, ease: "none" }, startTime);
         }
 
         // Dim previous card (but keep it visible, no blur)
@@ -203,27 +192,21 @@ export default function FounderTimeline() {
           tl.to(
             cards[i - 1],
             {
-              opacity: 0.7,
+              opacity: 0.9,
               scale: 0.95,
-              borderColor: "rgba(255,255,255,0.1)",
-              boxShadow: "0 0 0px rgba(255,90,31,0)",
+              borderColor: "rgba(255,255,255,0.2)",
               duration: 0.15,
               ease: "power2.out",
             },
             startTime
           );
 
-          // Dim previous year
+          if (glows[i - 1]) {
+            tl.to(glows[i - 1], { opacity: 0, duration: 0.15, ease: "power2.out" }, startTime);
+          }
+
           if (years[i - 1]) {
-            tl.to(
-              years[i - 1],
-              {
-                color: "rgba(255,90,31,0.5)",
-                duration: 0.1,
-                ease: "none",
-              },
-              startTime
-            );
+            tl.to(years[i - 1], { color: "rgba(255,90,31,0.5)", duration: 0.1, ease: "none" }, startTime);
           }
         }
       });
@@ -237,27 +220,15 @@ export default function FounderTimeline() {
       if (!isMobile) return;
       const cards = mobileCardsRef.current.filter(Boolean) as HTMLDivElement[];
       const dots = mobileDotsRef.current.filter(Boolean) as HTMLDivElement[];
+      const glows = mobileGlowsRef.current.filter(Boolean) as HTMLDivElement[];
       const line = mobileLineRef.current;
       if (cards.length === 0 || !line) return;
 
-      // Initial states
-      gsap.set(cards, {
-        opacity: 0.5,
-        y: 20,
-        scale: 0.96,
-        filter: "blur(4px)",
-      });
+      gsap.set(cards, { opacity: 0.85, y: 20, scale: 0.96, filter: "blur(4px)" });
+      gsap.set(glows, { opacity: 0 });
+      gsap.set(dots, { scale: 0, opacity: 0 });
+      gsap.set(line, { height: "0%" });
 
-      gsap.set(dots, {
-        scale: 0,
-        opacity: 0,
-      });
-
-      gsap.set(line, {
-        height: "0%",
-      });
-
-      // Animate line on section entry
       gsap.to(line, {
         height: "100%",
         ease: "none",
@@ -269,7 +240,6 @@ export default function FounderTimeline() {
         },
       });
 
-      // Each card reveals as you scroll past it
       cards.forEach((card, i) => {
         const cardTl = gsap.timeline({
           scrollTrigger: {
@@ -280,13 +250,8 @@ export default function FounderTimeline() {
           },
         });
 
-        cardTl.to(dots[i], {
-          scale: 1,
-          opacity: 1,
-          duration: 0.3,
-          ease: "back.out(2)",
-        }, 0);
-
+        cardTl.to(dots[i], { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 0);
+        
         cardTl.to(card, {
           opacity: 1,
           y: 0,
@@ -294,7 +259,19 @@ export default function FounderTimeline() {
           filter: "blur(0px)",
           duration: 0.5,
           ease: "power2.out",
+          onStart: () => {
+            window.dispatchEvent(new CustomEvent("journey-step", { detail: TIMELINE_EVENTS[i].year }));
+          },
+          onReverseComplete: () => {
+            if (i > 0) {
+              window.dispatchEvent(new CustomEvent("journey-step", { detail: TIMELINE_EVENTS[i - 1].year }));
+            }
+          }
         }, 0.1);
+
+        if (glows[i]) {
+          cardTl.to(glows[i], { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.1);
+        }
       });
     },
     { scope: sectionRef, dependencies: [isMobile] }
@@ -305,7 +282,7 @@ export default function FounderTimeline() {
       id="journey"
       ref={sectionRef}
       data-theme="dark"
-      className="py-16 lg:py-24 relative overflow-hidden select-none"
+      className="py-8 lg:py-12 relative overflow-hidden select-none"
       style={{ backgroundColor: "transparent" }}
     >
       {/* Background launchpad grid overlay */}
@@ -313,33 +290,34 @@ export default function FounderTimeline() {
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
         {/* ── Section Header ── */}
-        <div className="mb-20 text-center">
+        <div className="mb-[100px] text-center">
           <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#FF5A1F] uppercase block mb-3">
             OUR JOURNEY
           </span>
-          <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal opacity-100 drop-shadow-md">
-            How BITS Pilani computer labs led to building XYZ Labs.
+          <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal">
+            The Journey From <span className="text-[#FF5A1F]">BITS Pilani</span> To XYZ Labs
           </h2>
         </div>
 
         {/* ── DESKTOP HORIZONTAL TIMELINE ── */}
-        <div ref={desktopWrapRef} className="hidden md:block relative w-full h-[800px] lg:h-[900px]">
+        <div ref={desktopWrapRef} className="hidden md:block relative w-full h-[380px] lg:h-[460px]">
           {/* Horizontal connection line track */}
-          <div className="absolute left-[6%] right-[6%] top-[400px] lg:top-[450px] h-[2px] bg-white/20 z-0">
+          <div className="absolute left-[4%] right-[4%] top-[190px] lg:top-[230px] h-[2px] bg-white/20 z-0">
             <div
               ref={desktopLineRef}
-              className="h-full bg-gradient-to-r from-[#E8500A] via-[#FF5A1F] to-[#E8500A]"
+              className="h-full bg-gradient-to-r from-[#E8500A] via-[#FF5A1F] to-[#E8500A] opacity-70"
               style={{
                 width: "0%",
-                boxShadow: "0 0 20px rgba(232,80,10,0.6)",
+                boxShadow: "0 0 8px rgba(232,80,10,0.3)",
               }}
             />
             {/* Energy particles flowing along the line */}
             <EnergyParticles direction="horizontal" />
           </div>
 
-          <div className="grid grid-cols-5 gap-6 relative z-10 w-full h-full">
+          <div className="grid grid-cols-5 gap-4 lg:gap-6 relative z-10 w-full h-full">
             {TIMELINE_EVENTS.map((event, index) => {
+              // Exact positioning: Top row = 2018, 2024, 2026. Bottom row = 2022, 2025.
               const isHigher = index % 2 === 0;
 
               return (
@@ -348,7 +326,7 @@ export default function FounderTimeline() {
                   className="relative flex flex-col items-center justify-center h-full"
                 >
                   {/* Glowing dot on the timeline */}
-                  <div className="absolute top-[400px] lg:top-[450px] -translate-y-1/2 z-20">
+                  <div className="absolute top-[190px] lg:top-[230px] -translate-y-1/2 z-20">
                     <div
                       ref={(el) => { desktopDotsRef.current[index] = el; }}
                       className="w-4 h-4 rounded-full bg-[#141412] border-2 border-[#E8500A] relative flex items-center justify-center"
@@ -366,43 +344,55 @@ export default function FounderTimeline() {
                   {/* Timeline card */}
                   <div
                     ref={(el) => { desktopCardsRef.current[index] = el; }}
-                    className={`absolute w-full px-2 ${
-                      isHigher ? "bottom-[420px] lg:bottom-[480px]" : "top-[420px] lg:top-[480px]"
+                    className={`absolute w-full px-1 ${
+                      isHigher ? "bottom-[210px] lg:bottom-[250px]" : "top-[210px] lg:top-[250px]"
                     }`}
                     style={{
-                      opacity: 0.6,
+                      opacity: 0.85,
                       transform: "scale(0.95)",
                       willChange: "transform, opacity",
                     }}
                   >
                     <div
-                      className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm transition-colors duration-300"
-                      style={{ backgroundColor: "rgba(255,255,255,0.02)" }}
+                      className="relative p-4 lg:p-5 rounded-2xl border border-white/20 backdrop-blur-sm transition-colors duration-300 overflow-hidden"
+                      style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                     >
+                      {/* Radial Soft Glow (instead of box-shadow) */}
+                      <div
+                        ref={(el) => { desktopGlowsRef.current[index] = el; }}
+                        className="absolute inset-0 z-0 pointer-events-none opacity-0 mix-blend-screen"
+                        style={{
+                          background: "radial-gradient(circle at 50% 50%, rgba(232,80,10,0.2) 0%, transparent 70%)",
+                          filter: "blur(20px)"
+                        }}
+                      />
+
                       {/* Edge accent bar */}
                       <div
-                        className="absolute left-1/2 -translate-x-1/2 h-0.5 w-8 bg-[#E8500A] rounded-full opacity-40"
+                        className="absolute left-1/2 -translate-x-1/2 h-0.5 w-8 bg-[#E8500A] rounded-full opacity-40 z-10"
                         style={{ [isHigher ? "bottom" : "top"]: 0 }}
                       />
 
-                      {/* Year */}
-                      <span
-                        ref={(el) => { desktopYearsRef.current[index] = el; }}
-                        className="font-mono text-[12px] font-bold tracking-widest uppercase block mb-2"
-                        style={{ color: "rgba(255,255,255,0.45)" }}
-                      >
-                        {event.year}
-                      </span>
+                      <div className="relative z-10 flex flex-col items-center text-center">
+                        {/* Year */}
+                        <span
+                          ref={(el) => { desktopYearsRef.current[index] = el; }}
+                          className="font-mono text-[11px] font-bold tracking-widest uppercase block mb-1.5"
+                          style={{ color: "rgba(255,255,255,0.45)" }}
+                        >
+                          {event.year}
+                        </span>
 
-                      {/* Title */}
-                      <h3 className="font-serif text-[18px] font-bold text-white mb-3 leading-snug">
-                        {event.title}
-                      </h3>
+                        {/* Title */}
+                        <h3 className="font-serif text-[16px] lg:text-[17px] font-bold text-white mb-2 leading-snug">
+                          {event.title}
+                        </h3>
 
-                      {/* Description */}
-                      <p className="font-sans text-[13px] text-white/72 leading-relaxed font-normal">
-                        {event.desc}
-                      </p>
+                        {/* Description */}
+                        <p className="font-sans text-[11.5px] lg:text-[12px] text-white/90 leading-relaxed font-normal opacity-90">
+                          {event.desc}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -448,30 +438,48 @@ export default function FounderTimeline() {
                 {/* Card */}
                 <div
                   ref={(el) => { mobileCardsRef.current[index] = el; }}
-                  className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm"
+                  className="relative p-6 rounded-2xl border border-white/20 backdrop-blur-sm overflow-hidden"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    opacity: 0.5,
+                    backgroundColor: "rgba(255,255,255,0.05)",
+                    opacity: 0.85,
                     filter: "blur(4px)",
                     transform: "translateY(20px) scale(0.96)",
                     willChange: "transform, opacity, filter",
                   }}
                 >
-                  <span className="font-mono text-[12px] font-bold tracking-widest text-[#FF5A1F] uppercase block mb-1">
-                    {event.year}
-                  </span>
-                  <h3 className="font-serif text-[18px] font-bold text-white mb-2 leading-snug">
-                    {event.title}
-                  </h3>
-                  <p className="font-sans text-[13px] text-white/72 leading-relaxed">
-                    {event.desc}
-                  </p>
+                  <div
+                    ref={(el) => { mobileGlowsRef.current[index] = el; }}
+                    className="absolute inset-0 z-0 pointer-events-none opacity-0 mix-blend-screen"
+                    style={{
+                      background: "radial-gradient(circle at 50% 50%, rgba(232,80,10,0.2) 0%, transparent 70%)",
+                      filter: "blur(20px)"
+                    }}
+                  />
+                  <div className="relative z-10 flex flex-col items-center text-center">
+                    <span className="font-mono text-[12px] font-bold tracking-widest text-[#FF5A1F] uppercase block mb-1">
+                      {event.year}
+                    </span>
+                    <h3 className="font-serif text-[18px] font-bold text-white mb-2 leading-snug">
+                      {event.title}
+                    </h3>
+                    <p className="font-sans text-[13px] text-white/90 leading-relaxed">
+                      {event.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
+
+        {/* ── BOTTOM STATEMENT ── */}
+        <div className="mt-10 md:mt-12 text-center">
+          <p className="font-sans text-[14px] lg:text-[15px] text-white/60 font-medium tracking-wide">
+            Built on friendship, shaped by experience, driven by execution.
+          </p>
+        </div>
       </div>
     </section>
   );
 }
+
