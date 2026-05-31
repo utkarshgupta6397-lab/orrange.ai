@@ -57,6 +57,8 @@ export default function LivingOperationsGraph() {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
   const outcomeRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const platformLeftAnchorRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const platformRightAnchorRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [anchors, setAnchors] = useState<{
     inputs: { x: number; y: number }[];
@@ -107,18 +109,20 @@ export default function LivingOperationsGraph() {
           y: ((rect.top + rect.height / 2) - svgRect.top) * scaleY
         };
       }),
-      centerLeft: INPUTS.map((_, i) => {
-        const inputAnchorPercentage = (i + 1) / (INPUTS.length + 1);
+      centerLeft: platformLeftAnchorRefs.current.map((el) => {
+        if (!el) return { x: 0, y: 0 };
+        const rect = el.getBoundingClientRect();
         return {
-          x: (cardRect.left - svgRect.left) * scaleX,
-          y: ((cardRect.top + cardRect.height * inputAnchorPercentage) - svgRect.top) * scaleY
+          x: (rect.left - svgRect.left) * scaleX,
+          y: ((rect.top + rect.height / 2) - svgRect.top) * scaleY
         };
       }),
-      centerRight: OUTCOMES.map((_, i) => {
-        const outputAnchorPercentage = (i + 1) / (OUTCOMES.length + 1);
+      centerRight: platformRightAnchorRefs.current.map((el) => {
+        if (!el) return { x: 0, y: 0 };
+        const rect = el.getBoundingClientRect();
         return {
-          x: (cardRect.right - svgRect.left) * scaleX,
-          y: ((cardRect.top + cardRect.height * outputAnchorPercentage) - svgRect.top) * scaleY
+          x: (rect.right - svgRect.left) * scaleX,
+          y: ((rect.top + rect.height / 2) - svgRect.top) * scaleY
         };
       })
     };
@@ -130,9 +134,7 @@ export default function LivingOperationsGraph() {
     });
   };
 
-  useLayoutEffect(() => {
-    updateGeometry();
-  }); // Run on every render cycle
+  // Removed the useLayoutEffect that ran on every render cycle
 
   useLayoutEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
@@ -148,6 +150,14 @@ export default function LivingOperationsGraph() {
     });
     
     outcomeRefs.current.forEach((el) => {
+      if (el) resizeObserver.observe(el);
+    });
+
+    platformLeftAnchorRefs.current.forEach((el) => {
+      if (el) resizeObserver.observe(el);
+    });
+
+    platformRightAnchorRefs.current.forEach((el) => {
       if (el) resizeObserver.observe(el);
     });
     
@@ -319,13 +329,6 @@ export default function LivingOperationsGraph() {
                     </circle>
                   )}
                 </g>
-                {/* Debug anchors */}
-                {hasBounds && (
-                  <>
-                    <circle cx={startX} cy={startY} r="5" fill="red" />
-                    <circle cx={endX} cy={endY} r="5" fill="red" />
-                  </>
-                )}
               </g>
             );
           })}
@@ -371,13 +374,6 @@ export default function LivingOperationsGraph() {
                     </circle>
                   )}
                 </g>
-                {/* Debug anchors */}
-                {hasBounds && (
-                  <>
-                    <circle cx={startX} cy={startY} r="5" fill="red" />
-                    <circle cx={endX} cy={endY} r="5" fill="red" />
-                  </>
-                )}
               </g>
             );
           })}
@@ -452,6 +448,20 @@ export default function LivingOperationsGraph() {
                 : 'shadow-[0_16px_50px_rgba(0,0,0,0.08)] border border-[#E8500A]/30'
             }`}
           >
+            {/* Left Anchors */}
+            <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-evenly pointer-events-none">
+              {INPUTS.map((_, i) => (
+                <div key={`left-anchor-${i}`} ref={el => { platformLeftAnchorRefs.current[i] = el; }} className="w-px h-px opacity-0" />
+              ))}
+            </div>
+            
+            {/* Right Anchors */}
+            <div className="absolute right-0 top-0 bottom-0 flex flex-col justify-evenly pointer-events-none">
+              {OUTCOMES.map((_, i) => (
+                <div key={`right-anchor-${i}`} ref={el => { platformRightAnchorRefs.current[i] = el; }} className="w-px h-px opacity-0" />
+              ))}
+            </div>
+
             {/* Inner background styling */}
             <div className="absolute inset-0 bg-[#E8500A]/5 launchpad-grid opacity-10 pointer-events-none rounded-[24px]" />
             <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-transparent pointer-events-none rounded-[24px]" />
