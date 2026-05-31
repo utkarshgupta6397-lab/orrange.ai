@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useSpring, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -11,7 +11,23 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const MISSION_STATEMENTS = [
+  { part1: "We don't sell software", part2: "we build operating systems for businesses." },
+  { part1: "We don't replace people", part2: "we remove repetitive work." },
+  { part1: "We don't add tools", part2: "we create leverage." },
+  { part1: "We don't automate tasks", part2: "we automate outcomes." },
+  { part1: "We don't build features", part2: "we build business advantages." },
+];
+
 export default function AboutHero() {
+  const [missionIndex, setMissionIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMissionIndex((prev) => (prev + 1) % MISSION_STATEMENTS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
   const containerRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subContentRef = useRef<HTMLDivElement>(null);
@@ -207,15 +223,27 @@ export default function AboutHero() {
             to create systems that <span className="hero-hl-word hl-learn inline-block bg-clip-text text-transparent bg-[length:250%_100%] bg-[100%_0] transition-none" style={{ backgroundImage: "linear-gradient(90deg, #FF8A55 0%, #E8500A 40%, #FFFFFF 60%, #FFFFFF 100%)", WebkitTextFillColor: "transparent" }}>learn</span>, adapt, and <span className="hero-hl-word hl-scale inline-block bg-clip-text text-transparent bg-[length:250%_100%] bg-[100%_0] transition-none" style={{ backgroundImage: "linear-gradient(90deg, #FF8A55 0%, #E8500A 40%, #FFFFFF 60%, #FFFFFF 100%)", WebkitTextFillColor: "transparent" }}>scale</span> alongside your business.
           </p>
 
-          {/* Timeline preview breadcrumbs */}
-          <div className="mt-20 flex items-center justify-center gap-4 text-white/40 font-mono text-[10px] tracking-[0.2em] uppercase">
-            <span>2018 BITS Pilani</span>
-            <span className="w-6 h-[1px] bg-white/20" />
-            <span>2020 Industry</span>
-            <span className="w-6 h-[1px] bg-white/20" />
-            <span>2022 Bottleneck</span>
-            <span className="w-6 h-[1px] bg-white/20" />
-            <span>2024 Reunion</span>
+          {/* Founder Principles & Mission Rotator */}
+          <div className="mt-12 max-w-[800px] mx-auto flex flex-col items-center">
+            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#E8500A]/80 uppercase block mb-4">
+              HOW WE THINK
+            </span>
+            <div className="h-[60px] w-full relative flex items-center justify-center overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={missionIndex}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute text-center flex items-center justify-center w-full"
+                >
+                  <p className="text-[18px] md:text-[24px] text-white font-semibold">
+                    {MISSION_STATEMENTS[missionIndex].part1} — <span className="text-[#FF8A55]">{MISSION_STATEMENTS[missionIndex].part2}</span>
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
