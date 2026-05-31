@@ -30,6 +30,11 @@ const TIMELINE_EVENTS = [
     title: "Reunited to Build XYZ",
     desc: "We quit our jobs and reunited to start XYZ Labs. We wanted to build a different kind of company — a software studio that acts as a technical partner, building bespoke systems that eliminate bottlenecks and give teams their time back.",
   },
+  {
+    year: "2025",
+    title: "Scaling The Vision",
+    desc: "Partnering with growing enterprises to architect systems that scale with their ambitions. Turning operations into a competitive advantage.",
+  },
 ];
 
 /* ── Energy Particle SVG ─────────────────────────────────────────────── */
@@ -111,9 +116,8 @@ export default function FounderTimeline() {
 
       // Set initial states
       gsap.set(cards, {
-        opacity: 0.5,
+        opacity: 0.6,
         scale: 0.95,
-        filter: "blur(4px)",
       });
 
       gsap.set(dots, {
@@ -133,8 +137,9 @@ export default function FounderTimeline() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 20%",
-          end: "bottom 10%",
+          pin: true,
+          start: "top top",
+          end: "+=1500",
           scrub: 0.8,
         },
       });
@@ -171,9 +176,9 @@ export default function FounderTimeline() {
           card,
           {
             opacity: 1,
-            scale: 1,
-            filter: "blur(0px)",
-            boxShadow: "0 0 40px rgba(255,90,31,0.15), 0 0 80px rgba(255,90,31,0.05)",
+            scale: 1.04,
+            borderColor: "rgba(255,90,31,0.5)",
+            boxShadow: "0 0 40px rgba(255,90,31,0.2), 0 0 80px rgba(255,90,31,0.1)",
             duration: 0.15,
             ease: "power2.out",
           },
@@ -198,7 +203,9 @@ export default function FounderTimeline() {
           tl.to(
             cards[i - 1],
             {
-              opacity: 0.65,
+              opacity: 0.7,
+              scale: 0.95,
+              borderColor: "rgba(255,255,255,0.1)",
               boxShadow: "0 0 0px rgba(255,90,31,0)",
               duration: 0.15,
               ease: "power2.out",
@@ -295,9 +302,10 @@ export default function FounderTimeline() {
 
   return (
     <section
+      id="journey"
       ref={sectionRef}
       data-theme="dark"
-      className="py-24 lg:py-36 relative overflow-hidden select-none"
+      className="py-16 lg:py-24 relative overflow-hidden select-none"
       style={{ backgroundColor: "transparent" }}
     >
       {/* Background launchpad grid overlay */}
@@ -306,18 +314,18 @@ export default function FounderTimeline() {
       <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
         {/* ── Section Header ── */}
         <div className="mb-20 text-center">
-          <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#E8500A] uppercase block mb-3">
+          <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#FF5A1F] uppercase block mb-3">
             OUR JOURNEY
           </span>
-          <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal opacity-90">
+          <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal opacity-100 drop-shadow-md">
             How BITS Pilani computer labs led to building XYZ Labs.
           </h2>
         </div>
 
         {/* ── DESKTOP HORIZONTAL TIMELINE ── */}
-        <div ref={desktopWrapRef} className="hidden md:block relative w-full h-[900px]">
+        <div ref={desktopWrapRef} className="hidden md:block relative w-full h-[800px] lg:h-[900px]">
           {/* Horizontal connection line track */}
-          <div className="absolute left-[6%] right-[6%] top-[450px] h-[2px] bg-white/10 z-0">
+          <div className="absolute left-[6%] right-[6%] top-[400px] lg:top-[450px] h-[2px] bg-white/20 z-0">
             <div
               ref={desktopLineRef}
               className="h-full bg-gradient-to-r from-[#E8500A] via-[#FF5A1F] to-[#E8500A]"
@@ -330,7 +338,7 @@ export default function FounderTimeline() {
             <EnergyParticles direction="horizontal" />
           </div>
 
-          <div className="grid grid-cols-4 gap-6 relative z-10 w-full h-full">
+          <div className="grid grid-cols-5 gap-6 relative z-10 w-full h-full">
             {TIMELINE_EVENTS.map((event, index) => {
               const isHigher = index % 2 === 0;
 
@@ -340,7 +348,7 @@ export default function FounderTimeline() {
                   className="relative flex flex-col items-center justify-center h-full"
                 >
                   {/* Glowing dot on the timeline */}
-                  <div className="absolute top-[450px] -translate-y-1/2 z-20">
+                  <div className="absolute top-[400px] lg:top-[450px] -translate-y-1/2 z-20">
                     <div
                       ref={(el) => { desktopDotsRef.current[index] = el; }}
                       className="w-4 h-4 rounded-full bg-[#141412] border-2 border-[#E8500A] relative flex items-center justify-center"
@@ -359,13 +367,12 @@ export default function FounderTimeline() {
                   <div
                     ref={(el) => { desktopCardsRef.current[index] = el; }}
                     className={`absolute w-full px-2 ${
-                      isHigher ? "bottom-[480px]" : "top-[480px]"
+                      isHigher ? "bottom-[420px] lg:bottom-[480px]" : "top-[420px] lg:top-[480px]"
                     }`}
                     style={{
-                      opacity: 0.5,
-                      filter: "blur(4px)",
+                      opacity: 0.6,
                       transform: "scale(0.95)",
-                      willChange: "transform, opacity, filter",
+                      willChange: "transform, opacity",
                     }}
                   >
                     <div
@@ -382,7 +389,7 @@ export default function FounderTimeline() {
                       <span
                         ref={(el) => { desktopYearsRef.current[index] = el; }}
                         className="font-mono text-[12px] font-bold tracking-widest uppercase block mb-2"
-                        style={{ color: "rgba(255,255,255,0.3)" }}
+                        style={{ color: "rgba(255,255,255,0.45)" }}
                       >
                         {event.year}
                       </span>
@@ -393,7 +400,7 @@ export default function FounderTimeline() {
                       </h3>
 
                       {/* Description */}
-                      <p className="font-sans text-[13px] text-white/60 leading-relaxed font-normal">
+                      <p className="font-sans text-[13px] text-white/72 leading-relaxed font-normal">
                         {event.desc}
                       </p>
                     </div>
@@ -450,13 +457,13 @@ export default function FounderTimeline() {
                     willChange: "transform, opacity, filter",
                   }}
                 >
-                  <span className="font-mono text-[12px] font-bold tracking-widest text-[#E8500A] uppercase block mb-1">
+                  <span className="font-mono text-[12px] font-bold tracking-widest text-[#FF5A1F] uppercase block mb-1">
                     {event.year}
                   </span>
                   <h3 className="font-serif text-[18px] font-bold text-white mb-2 leading-snug">
                     {event.title}
                   </h3>
-                  <p className="font-sans text-[13px] text-white/60 leading-relaxed">
+                  <p className="font-sans text-[13px] text-white/72 leading-relaxed">
                     {event.desc}
                   </p>
                 </div>

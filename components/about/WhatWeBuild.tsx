@@ -40,7 +40,7 @@ export default function WhatWeBuild() {
     const pills = pillsRef.current.querySelectorAll(".cap-pill");
     pills.forEach((pill, i) => {
       gsap.from(pill, {
-        opacity: 0.5,
+        opacity: 0.75,
         y: 20,
         filter: "blur(4px)",
         scale: 0.9,
@@ -81,7 +81,7 @@ export default function WhatWeBuild() {
     <section
       ref={sectionRef}
       data-theme="dark"
-      className="py-28 lg:py-36 relative overflow-hidden"
+      className="py-16 lg:py-24 relative overflow-hidden"
       style={{ backgroundColor: "transparent" }}
     >
       <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
@@ -92,7 +92,7 @@ export default function WhatWeBuild() {
           <h2 className="font-serif text-[36px] sm:text-[48px] leading-[1.1] tracking-[-0.02em] text-white mt-4 mb-6 font-normal">
             Software that does the heavy lifting.
           </h2>
-          <p className="font-sans text-[17px] text-white/50 leading-relaxed max-w-2xl mx-auto mb-16">
+          <p className="font-sans text-[17px] text-[rgba(255,255,255,0.72)] leading-relaxed max-w-2xl mx-auto mb-16">
             We don&apos;t build generic marketing sites or write SEO articles. We build the operational engines that power businesses behind the scenes.
           </p>
         </div>
@@ -105,7 +105,7 @@ export default function WhatWeBuild() {
           {CAPABILITIES.map((cap, i) => (
             <div
               key={i}
-              className="cap-pill px-6 py-3 rounded-full border border-white/10 bg-white/[0.03] text-white font-sans text-[14px] font-semibold tracking-tight cursor-default select-none transition-all duration-500 hover:bg-[#E8500A]/10 hover:border-[#E8500A]/40 hover:text-[#FF5A1F] hover:shadow-[0_8px_30px_rgba(232,80,10,0.12)] hover:-translate-y-1 hover:scale-105"
+              className="cap-pill px-6 py-3 rounded-full border border-white/10 bg-white/[0.03] text-white font-sans text-[14px] font-semibold tracking-tight cursor-default select-none transition-all duration-500 hover:bg-[#E8500A]/10 hover:border-[#E8500A]/40 hover:text-[#FF5A1F] hover:shadow-[0_8px_30px_rgba(255,90,31,0.25)] hover:-translate-y-1.5 hover:scale-105"
               style={{
                 ...getMagneticStyle(i),
                 animation: `float-drift ${6 + i * 0.8}s ease-in-out infinite`,
@@ -120,10 +120,10 @@ export default function WhatWeBuild() {
         {/* CTA Link */}
         <div>
           <Link
-            href="/#work"
+            href="/#contact"
             className="inline-flex items-center gap-2 font-sans text-[15px] font-bold text-[#E8500A] hover:text-[#FF5A1F] transition-colors group"
           >
-            See our recent work
+            Get in touch
             <span className="transition-transform duration-150 group-hover:translate-x-1">
               →
             </span>

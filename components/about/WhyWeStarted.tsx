@@ -35,7 +35,7 @@ export default function WhyWeStarted() {
       ...(p2Split.words || []),
       ...(p3Split.words || []),
     ];
-    gsap.set(allWords, { opacity: 0.5, filter: "blur(2px)" });
+    gsap.set(allWords, { opacity: 0.75, filter: "blur(2px)" });
 
     // Helper: mark emphasis words with orange flash
     const revealWords = (words: HTMLElement[], triggerEl: HTMLElement, start: string, end: string) => {
@@ -100,32 +100,37 @@ export default function WhyWeStarted() {
 
   return (
     <section
+      id="philosophy"
       ref={sectionRef}
       data-theme="dark"
-      className="py-28 lg:py-36 relative overflow-hidden"
+      className="py-16 lg:py-24 relative overflow-hidden"
       style={{ backgroundColor: "transparent" }}
     >
       <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
 
         {/* UPPER LABEL */}
-        <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#E8500A] uppercase block mb-10 text-center">
+        <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#FF5A1F] uppercase block mb-3">
           THE REAL PROBLEM
         </span>
 
         {/* MEMORABLE CENTERPIECE QUOTE BLOCK */}
-        <div className="grid md:grid-cols-[6px_1fr] gap-8 items-stretch max-w-3xl mx-auto relative">
-          {/* Vertical Orange Accent Line */}
-          <div className="hidden md:block w-[4px] bg-[#E8500A]/60 rounded-full" />
+        <div className="grid md:grid-cols-[8px_1fr] gap-8 items-stretch max-w-3xl mx-auto relative mt-16 mb-24">
+          
+          {/* Subtle emotional background glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[150%] bg-[#FF5A1F] opacity-[0.03] blur-[60px] pointer-events-none rounded-full" aria-hidden="true" />
 
-          <div className="relative pl-2 md:pl-0">
+          {/* Vertical Orange Accent Line */}
+          <div className="hidden md:block w-[6px] bg-gradient-to-b from-[#FF5A1F] to-[#E8500A] rounded-full shadow-[0_0_15px_rgba(255,90,31,0.4)]" />
+
+          <div className="relative pl-6 md:pl-2">
             {/* Quote Mark Graphic */}
-            <div className="absolute -top-14 -left-6 font-serif text-[180px] text-white/[0.03] leading-none pointer-events-none select-none">
+            <div className="absolute -top-16 -left-6 font-serif text-[240px] text-white/[0.08] leading-none pointer-events-none select-none drop-shadow-md">
               &ldquo;
             </div>
 
             <h2
               ref={quoteRef}
-              className="font-serif text-[28px] sm:text-[38px] lg:text-[42px] leading-[1.2] tracking-[-0.03em] text-white font-normal relative z-10"
+              className="font-serif text-[28px] sm:text-[36px] md:text-[42px] leading-[1.2] text-white font-normal relative z-10 drop-shadow-md"
             >
               We saw companies spending millions on SaaS, yet their teams were still drowning in spreadsheets.
             </h2>
@@ -133,17 +138,17 @@ export default function WhyWeStarted() {
         </div>
 
         {/* NARRATIVE LAYOUT */}
-        <div className="mt-16 grid sm:grid-cols-2 gap-10 max-w-3xl mx-auto border-t border-white/10 pt-12">
+        <div className="grid sm:grid-cols-2 gap-10 max-w-3xl mx-auto border-t border-white/20 pt-12 relative z-10">
           <p
             ref={para1Ref}
-            className="font-sans text-[16px] leading-relaxed text-white/70"
+            className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
           >
             Before starting XYZ Labs, we worked on systems scaling to millions of users. What surprised us was what happened behind the scenes: even the most successful companies were held together by manual data entry, disconnected tools, and fragile spreadsheets.
           </p>
           <div className="space-y-6">
             <p
               ref={para2Ref}
-              className="font-sans text-[16px] leading-relaxed text-white/70"
+              className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
             >
               We realized that most software agencies are incentivized to sell hours, not outcomes. They build what they&apos;re told, collect their fees, and leave teams to deal with systems that don&apos;t actually automate the work.
             </p>

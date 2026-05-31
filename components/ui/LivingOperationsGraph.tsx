@@ -104,6 +104,7 @@ export default function LivingOperationsGraph() {
         </div>
 
         <motion.div 
+          id="ai-platform-center-mobile"
           className="relative rounded-[20px] p-5 text-left shadow-[0_16px_50px_rgba(232,80,10,0.12)] bg-white border border-[#E8500A]/30 overflow-hidden"
         >
           <div className="absolute inset-0 bg-[#E8500A]/5 launchpad-grid opacity-20 pointer-events-none" />
@@ -313,6 +314,7 @@ export default function LivingOperationsGraph() {
           />
 
           <div 
+            id="ai-platform-center"
             onMouseEnter={() => setHoveredCenter(true)}
             onMouseLeave={() => setHoveredCenter(false)}
             className={`w-full rounded-[24px] p-6 text-left cursor-default transition-all duration-300 relative bg-white flex flex-col gap-4 ${

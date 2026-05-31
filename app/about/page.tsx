@@ -5,6 +5,7 @@ import MeetTheFounders from "@/components/about/MeetTheFounders";
 import WhyWeStarted from "@/components/about/WhyWeStarted";
 import WhatWeBelieve from "@/components/about/WhatWeBelieve";
 import WhatWeBuild from "@/components/about/WhatWeBuild";
+import StoryProgress from "@/components/about/StoryProgress";
 import CTABanner from "@/components/sections/CTABanner";
 
 export const metadata = {
@@ -15,13 +16,19 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <CinematicAboutWrapper>
+      <StoryProgress />
       <AboutHero />
       <FounderTimeline />
       <MeetTheFounders />
       <WhyWeStarted />
       <WhatWeBelieve />
       <WhatWeBuild />
-      <CTABanner />
+      
+      {/* Footer Transition: Fades the dark theme into the light footer */}
+      <div className="w-full h-32 bg-gradient-to-b from-transparent to-white" />
+      <div className="bg-white">
+        <CTABanner />
+      </div>
     </CinematicAboutWrapper>
   );
 }

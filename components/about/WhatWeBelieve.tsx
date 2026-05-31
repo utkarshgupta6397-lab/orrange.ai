@@ -39,7 +39,7 @@ export default function WhatWeBelieve() {
 
     // Headline entrance
     gsap.from(headlineRef.current, {
-      opacity: 0.75,
+      opacity: 0.85,
       x: -30,
       filter: "blur(4px)",
       duration: 1,
@@ -55,7 +55,7 @@ export default function WhatWeBelieve() {
     const cards = cardsRef.current.querySelectorAll(".belief-card");
     cards.forEach((card, i) => {
       gsap.from(card, {
-        opacity: 0.5,
+        opacity: 0.75,
         y: 40,
         filter: "blur(4px)",
         duration: 0.8,
@@ -90,9 +90,10 @@ export default function WhatWeBelieve() {
 
   return (
     <section
+      id="beliefs"
       ref={sectionRef}
       data-theme="dark"
-      className="py-28 lg:py-36 relative overflow-hidden"
+      className="py-16 lg:py-24 relative overflow-hidden"
       style={{ backgroundColor: "transparent" }}
     >
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
@@ -105,7 +106,7 @@ export default function WhatWeBelieve() {
             <h2 className="font-serif text-[36px] sm:text-[44px] leading-[1.1] tracking-[-0.02em] text-white mt-4 mb-6 font-normal">
               How We Build.
             </h2>
-            <p className="font-sans text-[16px] text-white/50 leading-relaxed max-w-sm">
+            <p className="font-sans text-[16px] text-white/72 leading-relaxed max-w-sm">
               We operate as a technical studio with strong opinions on how software should be built and delivered.
             </p>
           </div>
@@ -115,7 +116,7 @@ export default function WhatWeBelieve() {
             {BELIEFS.map((belief, i) => (
               <div
                 key={i}
-                className="belief-card relative p-8 rounded-xl bg-white/[0.03] backdrop-blur-sm cursor-default group overflow-hidden transition-all duration-500 hover:bg-white/[0.06] hover:-translate-y-1"
+                className="belief-card relative p-8 rounded-xl bg-white/[0.04] backdrop-blur-sm cursor-default group overflow-hidden transition-all duration-500 hover:bg-white/[0.08] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(255,90,31,0.15)]"
               >
                 {/* SVG Border Draw */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none rounded-xl" preserveAspectRatio="none">
@@ -133,13 +134,13 @@ export default function WhatWeBelieve() {
                 </svg>
 
                 {/* Static border fallback */}
-                <div className="absolute inset-0 rounded-xl border border-white/10 pointer-events-none" />
+                <div className="absolute inset-0 rounded-xl border border-white/20 pointer-events-none transition-colors duration-300 group-hover:border-[#FF5A1F]/40" />
 
                 {/* Hover energy gradient on border */}
                 <div
                   className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: "linear-gradient(135deg, rgba(232,80,10,0.15) 0%, transparent 50%, rgba(232,80,10,0.08) 100%)",
+                    background: "linear-gradient(135deg, rgba(255,90,31,0.2) 0%, transparent 50%, rgba(255,90,31,0.1) 100%)",
                   }}
                 />
 
@@ -150,7 +151,7 @@ export default function WhatWeBelieve() {
                   {belief.title}
                 </h3>
 
-                <p className="font-sans text-[14px] text-white/50 leading-relaxed relative z-10">
+                <p className="font-sans text-[14px] text-white/72 leading-relaxed relative z-10">
                   {belief.desc}
                 </p>
               </div>

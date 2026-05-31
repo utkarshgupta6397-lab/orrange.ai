@@ -21,7 +21,7 @@ export default function CinematicAboutWrapper({ children }: Props) {
     smoothMouse.current.y += dy * 0.08;
 
     if (spotlightRef.current) {
-      spotlightRef.current.style.transform = `translate(${smoothMouse.current.x - 400}px, ${smoothMouse.current.y - 400}px)`;
+      spotlightRef.current.style.transform = `translate(${smoothMouse.current.x - 500}px, ${smoothMouse.current.y - 500}px)`;
     }
 
     rafId.current = requestAnimationFrame(updateSpotlight);
@@ -128,19 +128,19 @@ export default function CinematicAboutWrapper({ children }: Props) {
   }, []);
 
   return (
-    <div className="relative" style={{ backgroundColor: "#0B0E14" }}>
+    <div className="relative" style={{ backgroundColor: "#0E1118" }}>
       {/* Subtle atmospheric gradient */}
       <div className="absolute inset-0 pointer-events-none z-[0]" style={{
-        background: "radial-gradient(ellipse at top, rgba(20, 30, 50, 0.4) 0%, transparent 60%), radial-gradient(ellipse at bottom, rgba(232, 80, 10, 0.05) 0%, transparent 60%)"
+        background: "radial-gradient(ellipse at top, rgba(20, 30, 50, 0.5) 0%, transparent 70%), radial-gradient(ellipse at bottom, rgba(232, 80, 10, 0.08) 0%, transparent 70%)"
       }} />
 
       {/* Orange Spotlight — fixed layer following cursor */}
       <div
         ref={spotlightRef}
-        className="fixed top-0 left-0 w-[800px] h-[800px] rounded-full pointer-events-none z-[1]"
+        className="fixed top-0 left-0 w-[1000px] h-[1000px] rounded-full pointer-events-none z-[1]"
         style={{
-          background: "radial-gradient(circle, rgba(255,100,50,0.15) 0%, rgba(255,100,50,0.06) 30%, transparent 65%)",
-          filter: "blur(80px)",
+          background: "radial-gradient(circle, rgba(255,100,50,0.2) 0%, rgba(255,100,50,0.08) 40%, transparent 75%)",
+          filter: "blur(100px)",
           willChange: "transform",
         }}
       />
