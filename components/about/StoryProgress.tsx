@@ -43,16 +43,16 @@ export default function StoryProgress() {
         const isActive = activeId === sec.id;
         return (
           <div key={sec.id} className="flex items-center gap-3 transition-all duration-300">
-            <div className="w-4 h-[2px] bg-white/20 relative">
+            <div className={`h-[2px] bg-white/10 relative transition-all duration-500 ease-out ${isActive ? "w-8" : "w-4"}`}>
               <div
-                className={`absolute inset-0 bg-[#FF5A1F] transition-all duration-500 ${
-                  isActive ? "w-full opacity-100 shadow-[0_0_8px_#FF5A1F]" : "w-0 opacity-0"
+                className={`absolute inset-0 bg-[#E8500A] transition-all duration-700 ease-out ${
+                  isActive ? "w-full opacity-100 shadow-[0_0_8px_rgba(232,80,10,0.4)]" : "w-0 opacity-0"
                 }`}
               />
             </div>
             <span
               className={`font-mono text-[10px] uppercase tracking-widest transition-all duration-500 ${
-                isActive ? "text-[#FF5A1F]" : "text-white/30"
+                isActive ? "text-[#E8500A]" : "text-white/30"
               }`}
             >
               0{i + 1} {sec.label}
