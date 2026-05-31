@@ -38,7 +38,7 @@ export default function Hero() {
     // Initial states for Living Operations Graph elements
     gsap.set('.graph-input', { opacity: 0, x: -20 });
     gsap.set('.graph-outcome', { opacity: 0, x: 20 });
-    gsap.set('.graph-path', { strokeDashoffset: 1000 });
+    gsap.set('.graph-path', { strokeDashoffset: 0 });
     gsap.set('.graph-particles', { opacity: 0 });
 
     const tl = gsap.timeline({

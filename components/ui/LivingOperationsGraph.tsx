@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   FileText, ShoppingCart, Package, CheckCircle, Wallet,
@@ -52,6 +52,19 @@ export default function LivingOperationsGraph() {
   const [hoveredOutcome, setHoveredOutcome] = useState<number | null>(null);
   const [hoveredCenter, setHoveredCenter] = useState(false);
 
+  const svgRef = useRef<SVGSVGElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const outcomeRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [anchors, setAnchors] = useState<{
+    inputs: { x: number; y: number }[];
+    outputs: { x: number; y: number }[];
+    centerLeft: { x: number; y: number }[];
+    centerRight: { x: number; y: number }[];
+  } | null>(null);
+
   // Layout constants for SVG
   const VIEWBOX_W = 850; // Widened to make room for massive center
   const VIEWBOX_H = 680;
@@ -66,18 +79,101 @@ export default function LivingOperationsGraph() {
     return (percent / 100) * VIEWBOX_H;
   };
 
-  const CENTER_Y = VIEWBOX_H / 2;
-  const SOURCE_EDGE_X = 180;
-  const CENTER_LEFT_X = 270;
-  const CENTER_RIGHT_X = 580;
-  const OUTCOME_EDGE_X = 670;
+  const updateGeometry = () => {
+    if (!svgRef.current || !cardRef.current) return;
+    
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const cardRect = cardRef.current.getBoundingClientRect();
+
+    if (svgRect.width === 0 || svgRect.height === 0) return;
+
+    const scaleX = VIEWBOX_W / svgRect.width;
+    const scaleY = VIEWBOX_H / svgRect.height;
+
+    const newAnchors = {
+      inputs: inputRefs.current.map((el) => {
+        if (!el) return { x: 0, y: 0 };
+        const rect = el.getBoundingClientRect();
+        return {
+          x: (rect.right - svgRect.left) * scaleX,
+          y: ((rect.top + rect.height / 2) - svgRect.top) * scaleY
+        };
+      }),
+      outputs: outcomeRefs.current.map((el) => {
+        if (!el) return { x: 0, y: 0 };
+        const rect = el.getBoundingClientRect();
+        return {
+          x: (rect.left - svgRect.left) * scaleX,
+          y: ((rect.top + rect.height / 2) - svgRect.top) * scaleY
+        };
+      }),
+      centerLeft: INPUTS.map((_, i) => {
+        const inputAnchorPercentage = (i + 1) / (INPUTS.length + 1);
+        return {
+          x: (cardRect.left - svgRect.left) * scaleX,
+          y: ((cardRect.top + cardRect.height * inputAnchorPercentage) - svgRect.top) * scaleY
+        };
+      }),
+      centerRight: OUTCOMES.map((_, i) => {
+        const outputAnchorPercentage = (i + 1) / (OUTCOMES.length + 1);
+        return {
+          x: (cardRect.right - svgRect.left) * scaleX,
+          y: ((cardRect.top + cardRect.height * outputAnchorPercentage) - svgRect.top) * scaleY
+        };
+      })
+    };
+
+    setAnchors((prev) => {
+      if (!prev) return newAnchors;
+      const isSame = JSON.stringify(prev) === JSON.stringify(newAnchors);
+      return isSame ? prev : newAnchors;
+    });
+  };
+
+  useLayoutEffect(() => {
+    updateGeometry();
+  }); // Run on every render cycle
+
+  useLayoutEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      updateGeometry();
+    });
+
+    if (containerRef.current) resizeObserver.observe(containerRef.current);
+    if (cardRef.current) resizeObserver.observe(cardRef.current);
+    if (svgRef.current) resizeObserver.observe(svgRef.current);
+    
+    inputRefs.current.forEach((el) => {
+      if (el) resizeObserver.observe(el);
+    });
+    
+    outcomeRefs.current.forEach((el) => {
+      if (el) resizeObserver.observe(el);
+    });
+    
+    window.addEventListener('resize', updateGeometry);
+
+    let rAF2: number;
+    const rAF1 = requestAnimationFrame(() => {
+      rAF2 = requestAnimationFrame(() => {
+        updateGeometry();
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(rAF1);
+      if (rAF2) cancelAnimationFrame(rAF2);
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateGeometry);
+    };
+  }, []);
 
   // The center block is 310px wide out of 850 = 36.4%
   // That means we give the sides roughly 31.8% padding
   const SIDE_PADDING = "31.5%";
 
   return (
-    <div className="w-full relative select-none font-sans graph-container">
+    <div ref={containerRef} className="w-full relative select-none font-sans graph-container">
       
       {/* ── MOBILE / TABLET LAYOUT (Stacked) ── */}
       <div className="lg:hidden flex flex-col gap-5 w-full max-w-sm mx-auto">
@@ -160,6 +256,7 @@ export default function LivingOperationsGraph() {
 
         {/* SVG Connections Layer */}
         <svg 
+          ref={svgRef}
           viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`} 
           className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
         >
@@ -183,8 +280,15 @@ export default function LivingOperationsGraph() {
 
           {/* Lines from Sources to Center */}
           {INPUTS.map((_, i) => {
-            const startY = getSourceY(i);
-            const pathD = `M ${SOURCE_EDGE_X},${startY} C ${(SOURCE_EDGE_X + CENTER_LEFT_X) / 2},${startY} ${(SOURCE_EDGE_X + CENTER_LEFT_X) / 2},${CENTER_Y} ${CENTER_LEFT_X},${CENTER_Y}`;
+            const hasBounds = anchors && anchors.inputs[i] && anchors.centerLeft[i];
+            const startX = hasBounds ? anchors.inputs[i].x : 0;
+            const startY = hasBounds ? anchors.inputs[i].y : 0;
+            const endX = hasBounds ? anchors.centerLeft[i].x : 0;
+            const endY = hasBounds ? anchors.centerLeft[i].y : 0;
+
+            const pathD = hasBounds
+              ? `M ${startX},${startY} C ${(startX + endX) / 2},${startY} ${(startX + endX) / 2},${endY} ${endX},${endY}`
+              : `M 0,0 L 0,0`;
             
             const isRelatedToHoveredOutcome = hoveredOutcome !== null ? OUTCOME_TO_INPUT_MAP[hoveredOutcome]?.includes(i) : false;
             const isHighlighted = hoveredSource === i || isRelatedToHoveredOutcome || hoveredCenter;
@@ -192,7 +296,7 @@ export default function LivingOperationsGraph() {
 
             return (
               <g key={`src-path-hero-${i}`}>
-                {/* Static Path */}
+                {/* Static Path - Always rendered so GSAP can find it on mount */}
                 <path 
                   d={pathD} 
                   fill="none" 
@@ -215,14 +319,28 @@ export default function LivingOperationsGraph() {
                     </circle>
                   )}
                 </g>
+                {/* Debug anchors */}
+                {hasBounds && (
+                  <>
+                    <circle cx={startX} cy={startY} r="5" fill="red" />
+                    <circle cx={endX} cy={endY} r="5" fill="red" />
+                  </>
+                )}
               </g>
             );
           })}
 
           {/* Lines from Center to Outcomes */}
           {OUTCOMES.map((_, i) => {
-            const endY = getOutcomeY(i);
-            const pathD = `M ${CENTER_RIGHT_X},${CENTER_Y} C ${(CENTER_RIGHT_X + OUTCOME_EDGE_X) / 2},${CENTER_Y} ${(CENTER_RIGHT_X + OUTCOME_EDGE_X) / 2},${endY} ${OUTCOME_EDGE_X},${endY}`;
+            const hasBounds = anchors && anchors.outputs[i] && anchors.centerRight[i];
+            const startX = hasBounds ? anchors.centerRight[i].x : 0;
+            const startY = hasBounds ? anchors.centerRight[i].y : 0;
+            const endX = hasBounds ? anchors.outputs[i].x : 0;
+            const endY = hasBounds ? anchors.outputs[i].y : 0;
+
+            const pathD = hasBounds
+              ? `M ${startX},${startY} C ${(startX + endX) / 2},${startY} ${(startX + endX) / 2},${endY} ${endX},${endY}`
+              : `M 0,0 L 0,0`;
             
             const isRelatedToHoveredInput = hoveredSource !== null ? INPUT_TO_OUTCOME_MAP[hoveredSource]?.includes(i) : false;
             const isHighlighted = hoveredOutcome === i || isRelatedToHoveredInput || hoveredCenter;
@@ -230,7 +348,7 @@ export default function LivingOperationsGraph() {
 
             return (
               <g key={`out-path-hero-${i}`}>
-                {/* Static Path */}
+                {/* Static Path - Always rendered so GSAP can find it on mount */}
                 <path 
                   d={pathD} 
                   fill="none" 
@@ -253,6 +371,13 @@ export default function LivingOperationsGraph() {
                     </circle>
                   )}
                 </g>
+                {/* Debug anchors */}
+                {hasBounds && (
+                  <>
+                    <circle cx={startX} cy={startY} r="5" fill="red" />
+                    <circle cx={endX} cy={endY} r="5" fill="red" />
+                  </>
+                )}
               </g>
             );
           })}
@@ -276,10 +401,13 @@ export default function LivingOperationsGraph() {
                 key={src.label}
                 onMouseEnter={() => setHoveredSource(i)}
                 onMouseLeave={() => setHoveredSource(null)}
-                className={`graph-input opacity-0 absolute w-full right-0 -translate-y-1/2 flex justify-end transition-all duration-300 ${isHighlighted ? 'z-10 -translate-y-[calc(50%+3px)]' : 'z-0'} ${isFaded ? 'opacity-40 grayscale' : ''}`}
+                className={`graph-input absolute w-full right-0 -translate-y-1/2 flex justify-end transition-all duration-300 ${isHighlighted ? 'z-10 -translate-y-[calc(50%+3px)]' : 'z-0'} ${isFaded ? 'opacity-40 grayscale' : ''}`}
                 style={{ top: `${topPercent}%` }}
               >
-                <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border bg-white shadow-sm transition-all duration-300 ${isHighlighted ? 'border-[#E8500A] shadow-[0_6px_16px_rgba(232,80,10,0.12)]' : 'border-[#E8E8E4]'}`}>
+                <div 
+                  ref={el => { inputRefs.current[i] = el; }}
+                  className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border bg-white shadow-sm transition-all duration-300 ${isHighlighted ? 'border-[#E8500A] shadow-[0_6px_16px_rgba(232,80,10,0.12)]' : 'border-[#E8E8E4]'}`}
+                >
                   <Icon size={14} className={`transition-colors duration-300 ${isHighlighted ? 'text-[#E8500A]' : 'text-[#9A9A93]'}`} />
                   <p className={`text-[11px] font-semibold whitespace-nowrap transition-colors duration-300 ${isHighlighted ? 'text-[#141412]' : 'text-[#5A5A54]'}`}>
                     {src.label}
@@ -315,6 +443,7 @@ export default function LivingOperationsGraph() {
 
           <div 
             id="ai-platform-center"
+            ref={cardRef}
             onMouseEnter={() => setHoveredCenter(true)}
             onMouseLeave={() => setHoveredCenter(false)}
             className={`w-full rounded-[24px] p-6 text-left cursor-default transition-all duration-300 relative bg-white flex flex-col gap-4 ${
@@ -416,10 +545,13 @@ export default function LivingOperationsGraph() {
                 key={out.label}
                 onMouseEnter={() => setHoveredOutcome(i)}
                 onMouseLeave={() => setHoveredOutcome(null)}
-                className={`graph-outcome opacity-0 absolute w-full left-0 -translate-y-1/2 flex justify-start transition-all duration-300 ${isHighlighted ? 'z-10 -translate-y-[calc(50%+3px)]' : 'z-0'} ${isFaded ? 'opacity-40 grayscale' : ''}`}
+                className={`graph-outcome absolute w-full left-0 -translate-y-1/2 flex justify-start transition-all duration-300 ${isHighlighted ? 'z-10 -translate-y-[calc(50%+3px)]' : 'z-0'} ${isFaded ? 'opacity-40 grayscale' : ''}`}
                 style={{ top: `${topPercent}%` }}
               >
-                <div className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border transition-all duration-300 ${isHighlighted ? 'bg-[#DCFCE7] border-[#16A34A]/50 shadow-[0_6px_16px_rgba(22,163,74,0.15)]' : 'bg-[#F0FDF4] border-[#86EFAC]/40 shadow-sm'}`}>
+                <div 
+                  ref={el => { outcomeRefs.current[i] = el; }}
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border transition-all duration-300 ${isHighlighted ? 'bg-[#DCFCE7] border-[#16A34A]/50 shadow-[0_6px_16px_rgba(22,163,74,0.15)]' : 'bg-[#F0FDF4] border-[#86EFAC]/40 shadow-sm'}`}
+                >
                   <Icon size={14} className={`transition-colors duration-300 ${isHighlighted ? 'text-[#16A34A]' : 'text-[#86EFAC]'}`} />
                   <p className={`text-[11px] font-bold whitespace-nowrap transition-colors duration-300 ${isHighlighted ? 'text-[#14532D]' : 'text-[#141412]'}`}>
                     {out.label}
