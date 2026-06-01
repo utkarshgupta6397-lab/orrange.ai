@@ -17,7 +17,7 @@ const FOUNDERS = [
     role: "Product • Operations • Systems",
     background: "BITS Pilani • Product Manager at DealShare",
     credentials: "Built and scaled internal business systems across procurement, finance, warehousing, dispatch, inventory, invoicing, and ERP workflows. Brings deep experience translating operational bottlenecks into software that teams actually use.",
-    image: "/images/founder1.png",
+    image: "/images/utkarsh-v2.png",
     objectPosition: "center 72%",
   },
   {
@@ -25,7 +25,7 @@ const FOUNDERS = [
     role: "Engineering • Architecture • Platform",
     background: "BITS Pilani • Software Engineer (Tekion, Aspora)",
     credentials: "Experienced in designing and building large-scale software platforms, backend systems, distributed architectures, and developer infrastructure. Focused on creating reliable systems that scale with business growth.",
-    image: "/images/founder2.png",
+    image: "/images/sourabh-v2.png",
     objectPosition: "center 68%",
   },
   {
@@ -33,7 +33,7 @@ const FOUNDERS = [
     role: "Finance • Consulting • Strategy",
     background: "BITS Pilani • MBA, IIM Kozhikode • CFA",
     credentials: "Brings expertise across consulting, enterprise operations, financial analysis, and business transformation. Helps bridge the gap between business strategy, operational execution, and technology implementation.",
-    image: "/images/founder3.png",
+    image: "/images/saksham-v2.png",
     objectPosition: "center 75%",
   },
 ];
