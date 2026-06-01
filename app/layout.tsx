@@ -73,8 +73,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${interTight.variable} ${inter.variable}`}
+      suppressHydrationWarning
     >
-      <body className="antialiased bg-bg-primary text-text-primary font-sans">
+      <body className="antialiased bg-bg-primary text-text-primary font-sans" suppressHydrationWarning>
         <Navbar />
         <main>{children}</main>
         <Footer />

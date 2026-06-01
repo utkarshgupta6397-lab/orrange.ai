@@ -55,6 +55,14 @@ export default function CTABanner() {
     }, 1800);
   };
 
+  const getInputClasses = (hasError?: boolean, isTextarea?: boolean, extra?: string) => {
+    const base = `w-full bg-black/40 border rounded-xl px-4 text-[13px] text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] focus:outline-none transition-all duration-250 ${isTextarea ? 'py-4 resize-none' : 'h-12'}`;
+    const borderState = hasError 
+      ? 'border-[#FF5F57]/50 focus:border-[#FF5F57] focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),0_0_12px_rgba(255,95,87,0.15)]'
+      : 'border-white/[0.08] focus:border-[#E8500A]/50 focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),0_0_12px_rgba(232,80,10,0.15)]';
+    return `${base} ${borderState} ${extra || ''}`.trim();
+  };
+
   return (
     <section
       id="contact"
@@ -64,6 +72,36 @@ export default function CTABanner() {
       style={{ backgroundColor: "#141412" }}
       className="py-24 lg:py-28 relative overflow-hidden"
     >
+      <style>{`
+        @keyframes ambientGlow {
+          0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.6;
+          }
+          33% {
+            transform: translate(-48%, -52%) scale(1.05);
+            opacity: 0.8;
+          }
+          66% {
+            transform: translate(-52%, -48%) scale(0.95);
+            opacity: 0.4;
+          }
+        }
+        @keyframes glassSweep {
+          0%, 80% {
+            transform: translateX(-150%) skewX(-30deg);
+            opacity: 0;
+          }
+          85% {
+            opacity: 1;
+          }
+          90%, 100% {
+            transform: translateX(150%) skewX(-30deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
+
       {/* Background visual details: subtle warm gradient bubble */}
       <div 
         className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-gradient-to-br from-[#E8500A]/10 to-transparent blur-[100px] pointer-events-none" 
@@ -126,113 +164,135 @@ export default function CTABanner() {
           </div>
 
           {/* ── Right Side: Interactive dark-mode Contact Form ── */}
-          <div className="w-full bg-white/[0.02] border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-sm relative min-h-[440px] flex flex-col justify-center">
-            
-            <AnimatePresence mode="wait">
-              {sendingState !== "success" ? (
-                <motion.form
-                  key="contact-form"
-                  onSubmit={handleSubmit}
-                  className="space-y-5"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Name */}
-                    <div className="flex flex-col gap-1.5">
-                      <label htmlFor="name" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className={`w-full bg-white/[0.04] border ${errors.name ? "border-[#FF5F57]" : "border-white/10"} rounded-xl h-12 px-4 text-[13px] text-white focus:outline-none focus:border-[#E8500A] transition-all`}
-                        placeholder="Utkarsh Gupta"
-                        disabled={sendingState === "sending"}
-                      />
-                      {errors.name && <span className="text-[9px] text-[#FF5F57]">{errors.name}</span>}
-                    </div>
+          <div className="relative w-full">
+            {/* Ambient AI Glow Behind Form */}
+            <div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] pointer-events-none"
+              style={{
+                background: "radial-gradient(circle at center, rgba(232,80,10,0.08) 0%, rgba(200,80,10,0.04) 30%, rgba(150,30,10,0.01) 60%, transparent 80%)",
+                filter: "blur(60px)",
+                animation: "ambientGlow 28s ease-in-out infinite"
+              }}
+            />
 
-                    {/* Email */}
-                    <div className="flex flex-col gap-1.5">
-                      <label htmlFor="email" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
-                        Work Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={`w-full bg-white/[0.04] border ${errors.email ? "border-[#FF5F57]" : "border-white/10"} rounded-xl h-12 px-4 text-[13px] text-white focus:outline-none focus:border-[#E8500A] transition-all`}
-                        placeholder="you@company.com"
-                        disabled={sendingState === "sending"}
-                      />
-                      {errors.email && <span className="text-[9px] text-[#FF5F57]">{errors.email}</span>}
-                    </div>
-                  </div>
+            <div className="relative w-full rounded-2xl p-6 sm:p-8 min-h-[440px] flex flex-col justify-center overflow-hidden bg-[#101010]/[0.68] backdrop-blur-[24px] saturate-[1.2] border border-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.2),0_20px_40px_-10px_rgba(0,0,0,0.8)] transition-all duration-500 ease-out hover:-translate-y-[2px] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),inset_0_-1px_0_rgba(0,0,0,0.3),0_30px_50px_-12px_rgba(0,0,0,0.9)] hover:bg-[#101010]/[0.62]">
+              
+              {/* Glass Reflection Sweep */}
+              <div 
+                className="absolute top-0 left-0 w-[150%] h-full pointer-events-none"
+                style={{
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)",
+                  filter: "blur(12px)",
+                  animation: "glassSweep 12s cubic-bezier(0.2, 0.8, 0.2, 1) infinite"
+                }}
+              />
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Company */}
-                    <div className="flex flex-col gap-1.5">
-                      <label htmlFor="company" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
-                        Company / Organization
-                      </label>
-                      <input
-                        type="text"
-                        id="company"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleInputChange}
-                        className="w-full bg-white/[0.04] border border-white/10 rounded-xl h-12 px-4 text-[13px] text-white focus:outline-none focus:border-[#E8500A] transition-all"
-                        placeholder="XYZ Labs"
-                        disabled={sendingState === "sending"}
-                      />
-                    </div>
+              <div className="relative z-10">
+                <AnimatePresence mode="wait">
+                  {sendingState !== "success" ? (
+                    <motion.form
+                      key="contact-form"
+                      onSubmit={handleSubmit}
+                      className="space-y-5"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Name */}
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="name" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
+                            Full Name *
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className={getInputClasses(!!errors.name)}
+                            placeholder="Utkarsh Gupta"
+                            disabled={sendingState === "sending"}
+                          />
+                          {errors.name && <span className="text-[9px] text-[#FF5F57]">{errors.name}</span>}
+                        </div>
 
-                    {/* Budget Range */}
-                    <div className="flex flex-col gap-1.5">
-                      <label htmlFor="budget" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
-                        Budget Range
-                      </label>
-                      <select
-                        id="budget"
-                        name="budget"
-                        value={formData.budget}
-                        onChange={handleInputChange}
-                        className="w-full bg-[#1A1A18] border border-white/10 rounded-xl h-12 px-4 text-[13px] text-white focus:outline-none focus:border-[#E8500A] transition-all appearance-none cursor-pointer"
-                        disabled={sendingState === "sending"}
-                      >
-                        <option value="" disabled>Select a range...</option>
-                        <option value="<10k">Under $10k</option>
-                        <option value="10k-25k">$10k - $25k</option>
-                        <option value="25k-50k">$25k - $50k</option>
-                        <option value="50k+">$50k+</option>
-                      </select>
-                    </div>
-                  </div>
+                        {/* Email */}
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="email" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
+                            Work Email *
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className={getInputClasses(!!errors.email)}
+                            placeholder="you@company.com"
+                            disabled={sendingState === "sending"}
+                          />
+                          {errors.email && <span className="text-[9px] text-[#FF5F57]">{errors.email}</span>}
+                        </div>
+                      </div>
 
-                  {/* Details */}
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="details" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
-                      Bottlenecks or Project Details *
-                    </label>
-                    <textarea
-                      id="details"
-                      name="details"
-                      value={formData.details}
-                      onChange={handleInputChange}
-                      rows={4}
-                      className={`w-full bg-white/[0.04] border ${errors.details ? "border-[#FF5F57]" : "border-white/10"} rounded-xl p-4 text-[13px] text-white focus:outline-none focus:border-[#E8500A] transition-all resize-none`}
-                      placeholder="Tell us about the manual work, out-of-sync data, or custom dashboard requirements you need solved."
-                      disabled={sendingState === "sending"}
-                    />
-                    {errors.details && <span className="text-[9px] text-[#FF5F57]">{errors.details}</span>}
-                  </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Company */}
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="company" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
+                            Company / Organization
+                          </label>
+                          <input
+                            type="text"
+                            id="company"
+                            name="company"
+                            value={formData.company}
+                            onChange={handleInputChange}
+                            className={getInputClasses(false)}
+                            placeholder="XYZ Labs"
+                            disabled={sendingState === "sending"}
+                          />
+                        </div>
+
+                        {/* Budget Range */}
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="budget" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
+                            Budget Range
+                          </label>
+                          <select
+                            id="budget"
+                            name="budget"
+                            value={formData.budget}
+                            onChange={handleInputChange}
+                            className={getInputClasses(false, false, "appearance-none cursor-pointer")}
+                            disabled={sendingState === "sending"}
+                          >
+                            <option value="" disabled>Select a range...</option>
+                            <option value="<10k">Under $10k</option>
+                            <option value="10k-25k">$10k - $25k</option>
+                            <option value="25k-50k">$25k - $50k</option>
+                            <option value="50k+">$50k+</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Details */}
+                      <div className="flex flex-col gap-1.5">
+                        <label htmlFor="details" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
+                          Bottlenecks or Project Details *
+                        </label>
+                        <textarea
+                          id="details"
+                          name="details"
+                          value={formData.details}
+                          onChange={handleInputChange}
+                          rows={4}
+                          className={getInputClasses(!!errors.details, true)}
+                          placeholder="Tell us about the manual work, out-of-sync data, or custom dashboard requirements you need solved."
+                          disabled={sendingState === "sending"}
+                        />
+                        {errors.details && <span className="text-[9px] text-[#FF5F57]">{errors.details}</span>}
+                      </div>
 
                   {/* Submit Button */}
                   <button
@@ -289,7 +349,8 @@ export default function CTABanner() {
                 </motion.div>
               )}
             </AnimatePresence>
-
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
