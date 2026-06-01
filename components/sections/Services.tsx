@@ -46,27 +46,160 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
+const capabilityLabels: Record<string, string> = {
+  receivables: "Real-Time Data",
+  inventory: "Integration Friendly",
+  operations: "Workflow Driven",
+  automation: "Automation Ready",
+  reporting: "AI Compatible",
+  support: "Built For Scale",
+};
+
+const headerVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const descriptionVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+    scale: 1,
+    transition: { duration: 0.6, delay: 0.2 + (i * 0.1), ease: [0.16, 1, 0.3, 1] },
   }),
 };
 
 const containerVariants = {
   hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    }
-  }
+  visible: {},
+};
+
+const nodes = [
+  { id: 1, label: "AI Assistants", x: 40, y: 30, textY: 45, textAnchor: "start" as const, delay: 1.4 },
+  { id: 2, label: "Document Processing", x: 150, y: 85, textY: 70, textAnchor: "middle" as const, delay: 1.9 },
+  { id: 3, label: "Workflow Agents", x: 220, y: 25, textY: 10, textAnchor: "middle" as const, delay: 2.3 },
+  { id: 4, label: "Predictive Analytics", x: 300, y: 50, textY: 65, textAnchor: "middle" as const, delay: 2.7 },
+  { id: 5, label: "Decision Support", x: 390, y: 25, textY: 10, textAnchor: "middle" as const, delay: 3.1 },
+  { id: 6, label: "Automation Engine", x: 470, y: 75, textY: 90, textAnchor: "end" as const, delay: 3.5 },
+];
+
+const AISignalWave = ({ inView }: { inView: boolean }) => {
+  const pathD = "M 0,60 C 15,60 25,30 40,30 C 70,30 110,85 150,85 C 190,85 200,25 220,25 C 250,25 270,50 300,50 C 330,50 360,25 390,25 C 425,25 440,75 470,75 C 485,75 495,90 500,90";
+
+  return (
+    <div className="w-full h-[100px] relative">
+      <svg viewBox="0 0 500 100" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
+        {/* Base Path (Organic Architect Sketch) */}
+        <motion.path
+          d={pathD}
+          fill="none"
+          stroke="#141412"
+          strokeOpacity="0.12"
+          strokeWidth="1.5"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
+        />
+
+        {/* Initial Signal Pulse */}
+        <motion.path
+          d={pathD}
+          fill="none"
+          stroke="#E8500A"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeDasharray="40 1000"
+          initial={{ strokeDashoffset: 40, opacity: 0 }}
+          animate={inView ? { 
+            strokeDashoffset: [-50, -650], 
+            opacity: [0, 1, 1, 0] 
+          } : {}}
+          transition={{ 
+            delay: 1.2, 
+            duration: 2.5, 
+            ease: "linear"
+          }}
+          style={{ filter: "drop-shadow(0 0 3px rgba(232,80,10,0.5))" }}
+        />
+
+        {/* Continuous Subtle Pulse */}
+        <motion.path
+          d={pathD}
+          fill="none"
+          stroke="#E8500A"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeDasharray="30 1000"
+          initial={{ strokeDashoffset: 40, opacity: 0 }}
+          animate={inView ? { 
+            strokeDashoffset: [-50, -650],
+            opacity: [0, 0.35, 0.35, 0]
+          } : {}}
+          transition={{ 
+            delay: 8, 
+            duration: 3, 
+            ease: "linear",
+            repeat: Infinity,
+            repeatDelay: 8
+          }}
+        />
+
+        {/* Nodes and Labels */}
+        {nodes.map((node) => (
+          <g key={node.id}>
+            <motion.text
+              x={node.x}
+              y={node.textY}
+              textAnchor={node.textAnchor}
+              fontSize="11"
+              fontWeight="500"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1, fill: ["#E8500A", "#8A8A85"] } : { opacity: 0 }}
+              transition={{ delay: node.delay, duration: 1.2 }}
+              className="font-sans select-none pointer-events-none"
+            >
+              {node.label}
+            </motion.text>
+            <motion.circle
+              cx={node.x}
+              cy={node.y}
+              r="3.5"
+              initial={{ opacity: 0, scale: 0, fill: "#FF5A1F" }}
+              animate={inView ? { 
+                opacity: 1, 
+                scale: [0, 1.2, 1],
+                fill: ["#FF5A1F", "#E8500A"]
+              } : { opacity: 0, scale: 0 }}
+              transition={{ delay: node.delay, duration: 0.6 }}
+            />
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
 };
 
 export default function Services() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  
+  // Trigger when approximately 40% of the section enters the viewport. Run only once.
+  const inView = useInView(ref, { once: true, amount: 0.4 });
 
   return (
     <section
@@ -74,25 +207,58 @@ export default function Services() {
       ref={ref}
       aria-labelledby="services-heading"
       style={{ backgroundColor: "#FFFFFF" }}
-      className="py-24 lg:py-32"
+      className="py-8 lg:py-10"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-16">
-          <SectionLabel label="SYSTEM CAPABILITIES" />
-          <h2
-            id="services-heading"
-            className="font-serif text-[32px] sm:text-[48px] leading-[1.12] tracking-[-0.015em] mb-4"
-            style={{ color: "#141412", maxWidth: "640px" }}
-          >
-            Software Systems Tailored to Your Workflows
-          </h2>
-          <p
-            className="font-sans text-[17px] leading-relaxed"
-            style={{ color: "#5A5A54", maxWidth: "520px" }}
-          >
-            We build systems around the specific operational outcomes your business needs — not static off-the-shelf software.
-          </p>
+        {/* Top Section: Header + AI Signal Wave */}
+        <div className="mb-8 lg:mb-12 flex flex-col xl:flex-row xl:items-center justify-between gap-8 xl:gap-12">
+          {/* Header */}
+          <div className="w-full xl:max-w-[500px]">
+            <SectionLabel label="SYSTEM CAPABILITIES" />
+            <motion.h2
+              id="services-heading"
+              variants={headerVariants}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+              className="font-serif text-[32px] sm:text-[42px] leading-[1.12] tracking-[-0.015em] mb-3"
+              style={{ color: "#141412" }}
+            >
+              Software Systems Tailored to Your Workflows
+            </motion.h2>
+            <motion.p
+              variants={descriptionVariants}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+              className="font-sans text-[16px] leading-snug"
+              style={{ color: "#5A5A54" }}
+            >
+              We build systems around the specific operational outcomes your business needs — not static off-the-shelf software.
+            </motion.p>
+          </div>
+
+          {/* AI Signal Wave (Desktop/Tablet) */}
+          <div className="hidden md:block flex-1 max-w-[600px] w-full mt-4 xl:mt-0">
+             <AISignalWave inView={inView} />
+          </div>
+
+          {/* AI Signal Mobile List */}
+          <div className="block md:hidden w-full mt-2">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="flex flex-col gap-2"
+            >
+              {nodes.map(node => (
+                <div key={node.id} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#E8500A]" />
+                  <span className="font-sans text-[13px] font-medium text-text-secondary/80">
+                    {node.label}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
         {/* Cards grid */}
@@ -100,7 +266,7 @@ export default function Services() {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4"
         >
           {SERVICES.map((service, i) => (
             <motion.article
@@ -108,52 +274,35 @@ export default function Services() {
               custom={i}
               variants={cardVariants}
               whileHover={{
-                y: -5,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.01)",
+                y: -8,
+                boxShadow: "0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.02)",
+                transition: { duration: 0.2 },
               }}
-              className="rounded-2xl p-7 cursor-default border border-[#E8E8E4]/50 bg-[#F8F8F6]/20 transition-all duration-300 flex flex-col justify-between"
+              className="group rounded-2xl p-4 lg:p-5 cursor-default border border-[#E8E8E4]/50 bg-[#F8F8F6]/20 transition-all duration-200 hover:border-[#E8500A]/40 flex flex-col h-full"
               style={{
                 boxShadow: "0 4px 12px rgba(0,0,0,0.01)",
               }}
             >
-              <div>
-                {/* Icon Container with subtle scaling animation on hover */}
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 bg-[#FFF0E8] text-[#E8500A]"
-                >
+              <div className="flex-grow">
+                {/* Icon Container with background glow and scale on hover */}
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-all duration-200 bg-[#FFF0E8] text-[#E8500A] group-hover:scale-110 group-hover:bg-[#FFD4C2] group-hover:shadow-[0_0_20px_rgba(232,80,10,0.2)]">
                   {icons[service.icon]}
                 </div>
 
                 {/* Content */}
-                <h3
-                  className="font-sans text-[17px] font-bold leading-snug mb-3 text-text-primary"
-                >
+                <h3 className="font-sans text-[17px] font-bold leading-snug mb-1 text-text-primary">
                   {service.title}
                 </h3>
-                <p
-                  className="font-sans text-[14px] leading-relaxed mb-6 text-text-secondary"
-                >
+                <p className="font-sans text-[13px] leading-[1.4] mb-3 text-text-secondary/80">
                   {service.description}
                 </p>
               </div>
 
-              {/* Learn more link */}
-              <div>
-                <button
-                  onClick={() => {
-                    const el = document.querySelector("#contact");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="flex items-center gap-1.5 font-sans text-[13px] font-bold cursor-pointer transition-colors text-[#E8500A] hover:text-[#D04508] group"
-                >
-                  Explore system capability
-                  <span
-                    className="transition-transform duration-150 group-hover:translate-x-1"
-                    aria-hidden="true"
-                  >
-                    →
-                  </span>
-                </button>
+              {/* Capability Indicator Pill */}
+              <div className="mt-auto pt-3 border-t border-black/5">
+                <span className="inline-block px-3 py-1 bg-[#FFF0E8] text-[#E8500A] text-[10px] sm:text-[11px] font-bold uppercase tracking-wider rounded-full w-fit">
+                  {capabilityLabels[service.id] || "System Ready"}
+                </span>
               </div>
             </motion.article>
           ))}

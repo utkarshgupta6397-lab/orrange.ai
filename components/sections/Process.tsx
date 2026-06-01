@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValue, useTransform, useAnimationFrame } from "framer-motion";
 import { useRef } from "react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { PROCESS_STEPS } from "@/lib/constants";
@@ -8,6 +8,38 @@ import { PROCESS_STEPS } from "@/lib/constants";
 export default function Process() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  // Energy pulse animation state
+  const progress = useMotionValue(-0.1);
+  const cycleRef = useRef({ start: 0, duration: 4500, nextStart: 0 });
+
+  useAnimationFrame((time) => {
+    if (!inView) return;
+    
+    if (time < cycleRef.current.nextStart) {
+      progress.set(-0.1);
+      return;
+    }
+    
+    if (cycleRef.current.start === 0 || time > cycleRef.current.start + cycleRef.current.duration) {
+      if (cycleRef.current.start !== 0) {
+        const pause = 2000 + Math.random() * 6000;
+        cycleRef.current.nextStart = time + pause;
+        cycleRef.current.start = time + pause;
+        progress.set(-0.1);
+        return;
+      }
+      cycleRef.current.start = time;
+    }
+
+    const elapsed = time - cycleRef.current.start;
+    const p = Math.min(elapsed / cycleRef.current.duration, 1);
+    progress.set(p);
+  });
+
+  const pulseLeft = useTransform(progress, [0, 1], ["0%", "100%"]);
+  const pulseOpacity = useTransform(progress, (p) => (p >= 0 && p <= 1) ? 0.9 : 0);
+  const glowLeft = useTransform(progress, [0, 1], ["-10%", "90%"]);
 
   const scrollTo = (id: string) => {
     const el = document.querySelector(id);
@@ -44,53 +76,90 @@ export default function Process() {
         <div ref={ref} className="hidden lg:block mb-20 relative">
           
           {/* Connector line - Thicker and prominent orange shade */}
-          <div className="absolute top-6 left-[8%] right-[8%] z-0" aria-hidden="true">
+          <div className="absolute top-6 left-[10%] right-[10%] z-0 h-[2px]" aria-hidden="true">
             <div
-              className="w-full h-[2px]"
+              className="w-full h-full"
               style={{
                 background: "linear-gradient(to right, #E8500A 0%, #E8500A 100%)",
                 opacity: 0.25,
               }}
             />
+            {/* Energy flow brightened segment */}
+            <motion.div
+              className="absolute top-0 bottom-0"
+              style={{
+                width: "20%",
+                left: glowLeft,
+                opacity: pulseOpacity,
+                background: "linear-gradient(90deg, transparent 0%, #E8500A 50%, transparent 100%)",
+              }}
+            />
+            {/* Traveling Pulse Dot */}
+            <motion.div
+              className="absolute top-1/2 -mt-[4px] -ml-[4px] w-[8px] h-[8px] rounded-full"
+              style={{
+                left: pulseLeft,
+                opacity: pulseOpacity,
+                backgroundColor: "#E8500A",
+                boxShadow: "0 0 8px 1px rgba(232,80,10,0.8)",
+                filter: "blur(0.5px)",
+              }}
+            />
           </div>
 
           <div className="grid grid-cols-5 gap-6 relative z-10">
-            {PROCESS_STEPS.map((step, i) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 24 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.1,
-                  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-                }}
-                className="flex flex-col items-center text-center group"
-              >
-                {/* Step circle - Large & High Contrast */}
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center mb-6 font-mono text-[14px] font-bold transition-all duration-300 bg-white text-[#E8500A] border border-[#E8500A] shadow-[0_0_12px_rgba(232,80,10,0.1)] group-hover:scale-110 group-hover:bg-[#E8500A] group-hover:text-white"
-                >
-                  {step.number}
-                </div>
+            {PROCESS_STEPS.map((step, i) => {
+              const targetP = i * 0.25;
+              const scale = useTransform(progress, [targetP - 0.05, targetP, targetP + 0.05], [1, 1.03, 1]);
+              const shadow = useTransform(
+                progress,
+                [targetP - 0.05, targetP, targetP + 0.05],
+                [
+                  "0 0 12px rgba(232,80,10,0.1)",
+                  "0 0 20px rgba(232,80,10,0.6)",
+                  "0 0 12px rgba(232,80,10,0.1)"
+                ]
+              );
 
-                {/* Structured text container */}
-                <div className="bg-white rounded-xl p-5 border border-[#E8E8E4] flex-1 flex flex-col justify-start transition-all duration-300 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.04)] group-hover:-translate-y-1">
-                  <h3
-                    className="font-sans text-[15px] font-bold mb-2.5 leading-snug"
-                    style={{ color: "#141412" }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className="font-sans text-[13px] leading-relaxed"
-                    style={{ color: "#5A5A54" }}
-                  >
-                    {step.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+              return (
+                <motion.div
+                  key={step.number}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1,
+                    ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                  }}
+                  className="flex flex-col items-center text-center group"
+                >
+                  {/* Step circle - Pulse Wrapper */}
+                  <motion.div style={{ scale, boxShadow: shadow }} className="w-12 h-12 mb-6 rounded-full relative">
+                    <div
+                      className="w-full h-full rounded-full flex items-center justify-center font-mono text-[14px] font-bold transition-all duration-300 bg-white text-[#E8500A] border border-[#E8500A] group-hover:scale-110 group-hover:bg-[#E8500A] group-hover:text-white"
+                    >
+                      {step.number}
+                    </div>
+                  </motion.div>
+
+                  {/* Structured text container */}
+                  <div className="bg-white rounded-xl p-5 border border-[#E8E8E4] flex-1 flex flex-col justify-start transition-all duration-300 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.04)] group-hover:-translate-y-1 w-full">
+                    <h3
+                      className="font-sans text-[15px] font-bold mb-2.5 leading-snug"
+                      style={{ color: "#141412" }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p
+                      className="font-sans text-[13px] leading-relaxed"
+                      style={{ color: "#5A5A54" }}
+                    >
+                      {step.description}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 

@@ -96,7 +96,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[55vh] lg:min-h-[60vh] flex items-center pt-[100px] overflow-hidden"
+      className="relative min-h-[90vh] lg:min-h-[calc(100vh-80px)] flex items-center pt-[100px] overflow-hidden"
       aria-labelledby="hero-heading"
       style={{ backgroundColor: "#FFFFFF" }}
     >
