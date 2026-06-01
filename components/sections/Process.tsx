@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useTransform, useAnimationFrame } from "framer-motion";
+import { motion, useInView, useMotionValue, useTransform, useAnimationFrame, MotionValue } from "framer-motion";
 import { useRef } from "react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { PROCESS_STEPS } from "@/lib/constants";
@@ -108,58 +108,9 @@ export default function Process() {
           </div>
 
           <div className="grid grid-cols-5 gap-6 relative z-10">
-            {PROCESS_STEPS.map((step, i) => {
-              const targetP = i * 0.25;
-              const scale = useTransform(progress, [targetP - 0.05, targetP, targetP + 0.05], [1, 1.03, 1]);
-              const shadow = useTransform(
-                progress,
-                [targetP - 0.05, targetP, targetP + 0.05],
-                [
-                  "0 0 12px rgba(232,80,10,0.1)",
-                  "0 0 20px rgba(232,80,10,0.6)",
-                  "0 0 12px rgba(232,80,10,0.1)"
-                ]
-              );
-
-              return (
-                <motion.div
-                  key={step.number}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.1,
-                    ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-                  }}
-                  className="flex flex-col items-center text-center group"
-                >
-                  {/* Step circle - Pulse Wrapper */}
-                  <motion.div style={{ scale, boxShadow: shadow }} className="w-12 h-12 mb-6 rounded-full relative">
-                    <div
-                      className="w-full h-full rounded-full flex items-center justify-center font-mono text-[14px] font-bold transition-all duration-300 bg-white text-[#E8500A] border border-[#E8500A] group-hover:scale-110 group-hover:bg-[#E8500A] group-hover:text-white"
-                    >
-                      {step.number}
-                    </div>
-                  </motion.div>
-
-                  {/* Structured text container */}
-                  <div className="bg-white rounded-xl p-5 border border-[#E8E8E4] flex-1 flex flex-col justify-start transition-all duration-300 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.04)] group-hover:-translate-y-1 w-full">
-                    <h3
-                      className="font-sans text-[15px] font-bold mb-2.5 leading-snug"
-                      style={{ color: "#141412" }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p
-                      className="font-sans text-[13px] leading-relaxed"
-                      style={{ color: "#5A5A54" }}
-                    >
-                      {step.description}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
+            {PROCESS_STEPS.map((step, i) => (
+              <ProcessStepItem key={step.number} step={step} i={i} inView={inView} progress={progress} />
+            ))}
           </div>
         </div>
 
@@ -217,37 +168,98 @@ export default function Process() {
         </div>
 
         {/* ── Inline CTA ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ 
-            duration: 0.5, 
-            delay: 0.5, 
-            ease: [0.16, 1, 0.3, 1] as [number, number, number, number] 
-          }}
-          className="flex flex-col items-center justify-center gap-5 pt-10"
-          style={{ borderTop: "1px solid #E8E8E4" }}
-        >
-          <p className="font-sans text-[16px] font-bold text-center" style={{ color: "#141412" }}>
-            Want to see who&apos;s building your systems?
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <a
-              href="/about#founders"
-              className="flex justify-center items-center gap-2 font-sans text-[13px] font-bold h-11 px-6 rounded-lg cursor-pointer transition-all active:scale-[0.98] bg-[#141412] border border-[#2A2A28] text-white hover:bg-[#2A2A28] w-full sm:w-auto"
+        <div className="mt-20 border-t border-[#E8E8E4] pt-12 flex flex-col items-center justify-center text-center">
+          <h3 className="font-serif text-[24px] sm:text-[28px] mb-4 text-[#141412]">
+            Want to see who's building your systems?
+          </h3>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <button
+              onClick={() => scrollTo("#about")}
+              className="flex items-center justify-center gap-2 font-sans text-[15px] font-semibold h-13 px-7 rounded-lg cursor-pointer transition-all duration-150 border border-[#E8E8E4] text-[#141412] bg-[#F8F8F6] hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] active:scale-[0.98] whitespace-nowrap"
+              style={{
+                height: "52px",
+                paddingLeft: "28px",
+                paddingRight: "28px",
+              }}
             >
               Meet The Founders
-            </a>
+            </button>
             <button
               onClick={() => scrollTo("#contact")}
-              className="flex justify-center items-center gap-2 font-sans text-[13px] font-bold h-11 px-6 rounded-lg cursor-pointer transition-all active:scale-[0.98] bg-[#E8500A] text-white hover:bg-[#D04508] shadow-[0_4px_14px_rgba(232,80,10,0.25)] w-full sm:w-auto"
+              className="flex items-center justify-center gap-2 font-sans text-[15px] font-semibold h-13 px-7 rounded-lg cursor-pointer transition-all duration-150 bg-[#E8500A] text-white hover:bg-[#D04508] hover:shadow-[0_4px_16px_rgba(232,80,10,0.2)] active:scale-[0.98] whitespace-nowrap"
+              style={{
+                height: "52px",
+                paddingLeft: "28px",
+                paddingRight: "28px",
+              }}
             >
               Book A Discovery Call
-              <span aria-hidden="true">→</span>
             </button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
+  );
+}
+
+function ProcessStepItem({ 
+  step, 
+  i, 
+  inView, 
+  progress 
+}: { 
+  step: any; 
+  i: number; 
+  inView: boolean; 
+  progress: MotionValue<number>; 
+}) {
+  const targetP = i * 0.25;
+  const scale = useTransform(progress, [targetP - 0.05, targetP, targetP + 0.05], [1, 1.03, 1]);
+  const shadow = useTransform(
+    progress,
+    [targetP - 0.05, targetP, targetP + 0.05],
+    [
+      "0 0 12px rgba(232,80,10,0.1)",
+      "0 0 20px rgba(232,80,10,0.6)",
+      "0 0 12px rgba(232,80,10,0.1)"
+    ]
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.5,
+        delay: i * 0.1,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      }}
+      className="flex flex-col items-center text-center group"
+    >
+      {/* Step circle - Pulse Wrapper */}
+      <motion.div style={{ scale, boxShadow: shadow }} className="w-12 h-12 mb-6 rounded-full relative">
+        <div
+          className="w-full h-full rounded-full flex items-center justify-center font-mono text-[14px] font-bold transition-all duration-300 bg-white text-[#E8500A] border border-[#E8500A] group-hover:scale-110 group-hover:bg-[#E8500A] group-hover:text-white"
+        >
+          {step.number}
+        </div>
+      </motion.div>
+
+      {/* Structured text container */}
+      <div className="bg-white rounded-xl p-5 border border-[#E8E8E4] flex-1 flex flex-col justify-start transition-all duration-300 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.04)] group-hover:-translate-y-1 w-full">
+        <h3
+          className="font-sans text-[15px] font-bold mb-2.5 leading-snug"
+          style={{ color: "#141412" }}
+        >
+          {step.title}
+        </h3>
+        <p
+          className="font-sans text-[13px] leading-relaxed"
+          style={{ color: "#5A5A54" }}
+        >
+          {step.description}
+        </p>
+      </div>
+    </motion.div>
   );
 }
