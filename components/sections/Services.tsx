@@ -61,7 +61,7 @@ const headerVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 };
 
@@ -71,7 +71,7 @@ const descriptionVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 };
 
@@ -81,7 +81,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, delay: 0.2 + (i * 0.1), ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, delay: 0.2 + (i * 0.1), ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   }),
 };
 
