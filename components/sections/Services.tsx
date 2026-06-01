@@ -91,8 +91,8 @@ const containerVariants = {
 };
 
 const nodes = [
-  { id: 1, label: "AI Assistants", x: 40, y: 30, textY: 45, textAnchor: "start" as const, delay: 1.4 },
-  { id: 2, label: "Document Processing", x: 150, y: 85, textY: 70, textAnchor: "middle" as const, delay: 1.9 },
+  { id: 1, label: "AI Assistants", x: 40, y: 30, textY: 15, textAnchor: "middle" as const, delay: 1.4 },
+  { id: 2, label: "Document Processing", x: 150, y: 85, textY: 100, textAnchor: "middle" as const, delay: 1.9 },
   { id: 3, label: "Workflow Agents", x: 220, y: 25, textY: 10, textAnchor: "middle" as const, delay: 2.3 },
   { id: 4, label: "Predictive Analytics", x: 300, y: 50, textY: 65, textAnchor: "middle" as const, delay: 2.7 },
   { id: 5, label: "Decision Support", x: 390, y: 25, textY: 10, textAnchor: "middle" as const, delay: 3.1 },
