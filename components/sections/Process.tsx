@@ -170,7 +170,7 @@ export default function Process() {
         {/* ── Inline CTA ── */}
         <div className="mt-20 border-t border-[#E8E8E4] pt-12 flex flex-col items-center justify-center text-center">
           <h3 className="font-serif text-[24px] sm:text-[28px] mb-4 text-[#141412]">
-            Want to see who's building your systems?
+            Want to see who&apos;s building your systems?
           </h3>
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <button
@@ -208,7 +208,7 @@ function ProcessStepItem({
   inView, 
   progress 
 }: { 
-  step: any; 
+  step: { number: string; title: string; description: string }; 
   i: number; 
   inView: boolean; 
   progress: MotionValue<number>; 
