@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
+import { OrrangeLogo } from "@/components/ui/OrrangeLogo";
 
 const FOOTER_COLUMNS = [
   {
@@ -51,23 +52,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
           {/* Brand column */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="relative w-3.5 h-3.5 flex-shrink-0 flex items-center justify-center">
-                <span
-                  className="absolute w-2 h-2 bg-orange rotate-45 rounded-[1px]"
-                  aria-hidden="true"
-                />
-                <span
-                  className="absolute w-0.5 h-0.5 bg-white rotate-45"
-                  aria-hidden="true"
-                />
-              </div>
-              <span
-                className="font-sans text-[16px] font-bold tracking-[-0.02em]"
-                style={{ color: "#141412" }}
-              >
-                {SITE_CONFIG.name}
-              </span>
+            <div className="mb-4">
+              <OrrangeLogo className="h-[26px] sm:h-[28px] w-auto" isDarkTheme={false} />
             </div>
             <p
               className="font-sans text-[13px] leading-relaxed mb-5 max-w-[200px]"
