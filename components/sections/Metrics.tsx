@@ -40,7 +40,7 @@ export default function Metrics() {
   return (
     <section
       ref={ref}
-      aria-label="XYZ Labs metrics"
+      aria-label="orrange.ai metrics"
       className="py-16 bg-[#FFFFFF] border-t border-[#E8E8E4] border-b border-[#E8E8E4]"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">

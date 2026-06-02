@@ -18,8 +18,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://xyz-labs.com"),
-  title: "XYZ Labs — AI-Powered Systems That Adapt To Your Business",
+  metadataBase: new URL("https://orrange.ai"),
+  title: "orrange.ai — AI-Powered Systems That Adapt To Your Business",
   description:
     "Instead of forcing your team into rigid ERP systems and disconnected tools, we build AI-powered software around the way your business already operates.",
   keywords: [
@@ -31,13 +31,13 @@ export const metadata: Metadata = {
     "custom software",
     "AI automation"
   ],
-  authors: [{ name: "XYZ Labs" }],
+  authors: [{ name: "orrange.ai" }],
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://xyz-labs.com",
-    siteName: "XYZ Labs",
-    title: "XYZ Labs — AI-Powered Systems That Adapt To Your Business",
+    url: "https://orrange.ai",
+    siteName: "orrange.ai",
+    title: "orrange.ai — AI-Powered Systems That Adapt To Your Business",
     description:
       "Instead of forcing your team into rigid ERP systems and disconnected tools, we build AI-powered software around the way your business already operates.",
     images: [
@@ -45,16 +45,16 @@ export const metadata: Metadata = {
         url: "/og-image-placeholder.jpg",
         width: 1200,
         height: 630,
-        alt: "XYZ Labs",
+        alt: "orrange.ai",
       }
     ]
   },
   alternates: {
-    canonical: "https://xyz-labs.com",
+    canonical: "https://orrange.ai",
   },
   twitter: {
     card: "summary_large_image",
-    title: "XYZ Labs — Software That Eliminates Operational Bottlenecks",
+    title: "orrange.ai — Software That Eliminates Operational Bottlenecks",
     description:
       "Custom software and workflow automation for businesses that need real engineering, not demos.",
   },
@@ -62,6 +62,18 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon-light.svg",
+      media: "(prefers-color-scheme: light)",
+    },
+    {
+      rel: "icon",
+      url: "/favicon-dark.svg",
+      media: "(prefers-color-scheme: dark)",
+    },
+  ],
 };
 
 export default function RootLayout({

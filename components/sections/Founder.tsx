@@ -44,7 +44,7 @@ export default function Founder() {
               <p
                 className="font-sans text-[16px] sm:text-[18px] leading-relaxed text-text-secondary max-w-[540px]"
               >
-                XYZ Labs was founded by engineers who spent years scaling software at high-growth startups and enterprise operations. We saw how much efficiency is lost in manual bottlenecks — and built a studio dedicated to solving them.
+                orrange.ai was founded by engineers who spent years scaling software at high-growth startups and enterprise operations. We saw how much efficiency is lost in manual bottlenecks — and built a studio dedicated to solving them.
               </p>
             </div>
 

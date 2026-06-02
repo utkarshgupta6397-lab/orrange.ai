@@ -249,7 +249,7 @@ export default function CTABanner() {
                             value={formData.company}
                             onChange={handleInputChange}
                             className={getInputClasses(false)}
-                            placeholder="XYZ Labs"
+                            placeholder="orrange.ai"
                             disabled={sendingState === "sending"}
                           />
                         </div>

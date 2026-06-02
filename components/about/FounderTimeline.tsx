@@ -32,7 +32,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: "2026",
-    title: "Building XYZ Labs",
+    title: "Building orrange.ai",
     desc: "Combined collective experience to build AI-powered systems that help businesses operate and scale more effectively.",
   },
 ];
@@ -295,7 +295,7 @@ export default function FounderTimeline() {
             OUR JOURNEY
           </span>
           <h2 className="font-serif text-[32px] sm:text-[42px] leading-tight text-white max-w-xl mx-auto font-normal">
-            The Journey From <span className="text-[#FF5A1F]">BITS Pilani</span> To XYZ Labs
+            The Journey From <span className="text-[#FF5A1F]">BITS Pilani</span> To orrange.ai
           </h2>
         </div>
 

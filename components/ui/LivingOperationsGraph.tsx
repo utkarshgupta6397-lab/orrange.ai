@@ -470,7 +470,7 @@ export default function LivingOperationsGraph() {
               {/* Header Row */}
               <div className="flex items-center justify-between mb-3 w-full">
                 <span className="font-mono text-[9px] tracking-[0.2em] text-[#E8500A] font-bold uppercase block">
-                  XYZ LABS
+                  ORRANGE.AI
                 </span>
                 <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-[#F0FDF4] border border-[#86EFAC]/40 shadow-sm">
                   <span className="relative flex h-1.5 w-1.5">

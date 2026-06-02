@@ -130,7 +130,7 @@ export default function WhyWeStarted() {
               ref={(el) => { if (el) parasRef.current[0] = el; }}
               className="font-sans text-[16px] leading-relaxed text-[rgba(255,255,255,0.72)]"
             >
-              Before starting XYZ Labs, we worked on products and systems serving millions of users. The technology was impressive, but what stood out was something else: behind many successful businesses were teams still relying on spreadsheets, manual coordination, and disconnected software to keep operations running.
+              Before starting orrange.ai, we worked on products and systems serving millions of users. The technology was impressive, but what stood out was something else: behind many successful businesses were teams still relying on spreadsheets, manual coordination, and disconnected software to keep operations running.
             </p>
             <p
               ref={(el) => { if (el) parasRef.current[1] = el; }}

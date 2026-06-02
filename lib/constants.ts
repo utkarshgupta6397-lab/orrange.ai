@@ -1,10 +1,10 @@
 // ─── Site Config ─────────────────────────────────────────────────────────────
 export const SITE_CONFIG = {
-  name: "XYZ Labs",
+  name: "orrange.ai",
   tagline: "Software That Eliminates Operational Bottlenecks.",
   description:
     "We design and build internal software, automation systems, and business workflows that help teams move faster and operate with less manual effort.",
-  email: "hello@xyzlabs.io", // [PLACEHOLDER - CONTACT EMAIL]
+  email: "hello@orrange.ai", // [PLACEHOLDER - CONTACT EMAIL]
   linkedIn: "#", // [PLACEHOLDER - LINKEDIN URL]
   github: "#", // [PLACEHOLDER - GITHUB URL]
   calendlyUrl: "#", // [PLACEHOLDER - BOOKING LINK]
@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 export const NAV_LINKS = [
-  { label: "About", href: "/about" },
+  { label: "About Us", href: "/about" },
   { label: "Services", href: "/#services" },
   { label: "Process", href: "/#process" },
   { label: "Contact", href: "/#contact" },

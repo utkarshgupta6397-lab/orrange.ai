@@ -192,7 +192,7 @@ export default function AboutHero() {
       <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
         {/* ── Label ── */}
         <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#E8500A] uppercase block mb-6">
-          THE STORY OF XYZ LABS
+          THE STORY OF ORRANGE.AI
         </span>
 
         {/* ── Headline ── */}
@@ -203,7 +203,7 @@ export default function AboutHero() {
         >
           We <span className="hero-hl-word hl-built inline-block bg-clip-text text-transparent bg-[length:250%_100%] bg-[100%_0] transition-none" style={{ backgroundImage: "linear-gradient(90deg, #FF8A55 0%, #E8500A 40%, #FFFFFF 60%, #FFFFFF 100%)", WebkitTextFillColor: "transparent" }}>built</span>{" "}
           <span className="relative inline-block">
-            <span className="hero-hl-word hl-xyz inline-block bg-clip-text text-transparent bg-[length:250%_100%] bg-[100%_0] transition-none" style={{ backgroundImage: "linear-gradient(90deg, #FF8A55 0%, #E8500A 40%, #FFFFFF 60%, #FFFFFF 100%)", WebkitTextFillColor: "transparent" }}>XYZ Labs</span>
+            <span className="hero-hl-word hl-xyz inline-block bg-clip-text text-transparent bg-[length:250%_100%] bg-[100%_0] transition-none" style={{ backgroundImage: "linear-gradient(90deg, #FF8A55 0%, #E8500A 40%, #FFFFFF 60%, #FFFFFF 100%)", WebkitTextFillColor: "transparent" }}>orrange.ai</span>
             <span className="intelligence-flow absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-[#E8500A] to-transparent mix-blend-screen pointer-events-none opacity-0" />
           </span>{" "}
           because we hated seeing <span className="hero-hl-word hl-good-teams inline-block bg-clip-text text-transparent bg-[length:250%_100%] bg-[100%_0] transition-none" style={{ backgroundImage: "linear-gradient(90deg, #FF8A55 0%, #E8500A 40%, #FFFFFF 60%, #FFFFFF 100%)", WebkitTextFillColor: "transparent" }}>good teams</span> held back by bad systems.

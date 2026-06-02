@@ -26,7 +26,7 @@ function DashboardPlaceholder({ variant, label }: DashboardPlaceholderProps) {
           ))}
         </div>
         <div className="h-4 w-40 rounded bg-white border border-[#E8E8E4] flex items-center justify-center">
-          <span className="text-[8px] font-mono text-text-muted">app.xyzlabs.io/workspace</span>
+          <span className="text-[8px] font-mono text-text-muted">app.orrange.ai/workspace</span>
         </div>
         <div className="w-8" />
       </div>
@@ -37,7 +37,7 @@ function DashboardPlaceholder({ variant, label }: DashboardPlaceholderProps) {
         {/* Sidebar */}
         <div className="w-14 border-r border-[#E8E8E4] bg-[#F8F8F6] p-2 flex flex-col gap-2 flex-shrink-0">
           <div className="w-full h-4 rounded bg-[#E8500A]/10 flex items-center justify-center text-[#E8500A] font-bold text-[8px]">
-            XYZ
+            ORRANGE
           </div>
           {[0, 1, 2, 3].map((i) => (
             <div
@@ -180,7 +180,7 @@ function DashboardPlaceholder({ variant, label }: DashboardPlaceholderProps) {
                       <polygon points="12,2 2,22 22,22" />
                     </svg>
                   </div>
-                  <span className="text-[7px] font-bold text-text-primary">XYZ Classify</span>
+                  <span className="text-[7px] font-bold text-text-primary">Orrange Classify</span>
                 </div>
 
                 {/* Arrow */}
