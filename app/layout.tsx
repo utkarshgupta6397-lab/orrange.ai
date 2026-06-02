@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
+import BrandIntro from "@/components/ui/BrandIntro";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -88,6 +89,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased bg-bg-primary text-text-primary font-sans" suppressHydrationWarning>
+        <BrandIntro />
         <Navbar />
         <main>{children}</main>
         <Footer />
