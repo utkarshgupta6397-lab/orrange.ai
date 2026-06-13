@@ -6,7 +6,7 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import { PROCESS_STEPS } from "@/lib/constants";
 
 export default function Process() {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   // Energy pulse animation state
@@ -52,6 +52,7 @@ export default function Process() {
       aria-labelledby="process-heading"
       style={{ backgroundColor: "#F8F8F6" }}
       className="py-14 lg:py-28"
+      ref={ref as React.RefObject<HTMLElement>}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
@@ -73,7 +74,7 @@ export default function Process() {
         </div>
 
         {/* ── Desktop Timeline ── */}
-        <div ref={ref} className="hidden lg:block mb-20 relative">
+        <div className="hidden lg:block mb-20 relative">
           
           {/* Connector line - Thicker and prominent orange shade */}
           <div className="absolute top-6 left-[10%] right-[10%] z-0 h-[2px]" aria-hidden="true">

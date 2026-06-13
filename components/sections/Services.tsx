@@ -198,8 +198,8 @@ const AISignalWave = ({ inView }: { inView: boolean }) => {
 export default function Services() {
   const ref = useRef<HTMLDivElement>(null);
   
-  // Trigger when approximately 40% of the section enters the viewport. Run only once.
-  const inView = useInView(ref, { once: true, amount: 0.4 });
+  // Trigger when a small amount of the section enters the viewport to ensure it works on tall mobile screens.
+  const inView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
     <section
