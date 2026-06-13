@@ -20,9 +20,9 @@ export default function Founder() {
       ref={ref}
       aria-labelledby="founder-heading"
       style={{ backgroundColor: "#FFFFFF" }}
-      className="py-24 lg:py-32 border-t border-[#E8E8E4]"
+      className="py-14 lg:py-32 border-t border-[#E8E8E4]"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[55fr_45fr] gap-12 lg:gap-20 items-start">
           
           {/* ── Left Column: Editorial Trust Content ── */}
@@ -36,7 +36,7 @@ export default function Founder() {
               <SectionLabel label="ENGINEERING LEADERSHIP" />
               <h2
                 id="founder-heading"
-                className="font-serif text-[36px] sm:text-[48px] leading-[1.1] tracking-[-0.025em] mb-6"
+                className="font-serif text-[28px] sm:text-[48px] leading-[1.1] tracking-[-0.025em] mb-5"
                 style={{ color: "#141412", maxWidth: "600px" }}
               >
                 Systems Built by Seasoned Product Engineers

@@ -207,11 +207,11 @@ export default function Services() {
       ref={ref}
       aria-labelledby="services-heading"
       style={{ backgroundColor: "#FFFFFF" }}
-      className="py-8 lg:py-10"
+      className="py-12 lg:py-10"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         {/* Top Section: Header + AI Signal Wave */}
-        <div className="mb-8 lg:mb-12 flex flex-col xl:flex-row xl:items-center justify-between gap-8 xl:gap-12">
+        <div className="mb-8 lg:mb-12 flex flex-col xl:flex-row xl:items-center justify-between gap-6 xl:gap-12">
           {/* Header */}
           <div className="w-full xl:max-w-[500px]">
             <SectionLabel label="SYSTEM CAPABILITIES" />
@@ -220,7 +220,7 @@ export default function Services() {
               variants={headerVariants}
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
-              className="font-serif text-[32px] sm:text-[42px] leading-[1.12] tracking-[-0.015em] mb-3"
+              className="font-serif text-[28px] sm:text-[42px] leading-[1.12] tracking-[-0.015em] mb-3"
               style={{ color: "#141412" }}
             >
               Software Systems Tailored to Your Workflows

@@ -70,7 +70,7 @@ export default function CTABanner() {
       data-theme="dark"
       aria-labelledby="cta-heading"
       style={{ backgroundColor: "#141412" }}
-      className="py-24 lg:py-28 relative overflow-hidden"
+      className="py-14 lg:py-28 relative overflow-hidden"
     >
       <style>{`
         @keyframes ambientGlow {
@@ -108,7 +108,7 @@ export default function CTABanner() {
         aria-hidden="true"
       />
 
-      <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: 20 }}
           animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
@@ -116,7 +116,7 @@ export default function CTABanner() {
             duration: 0.8, 
             ease: [0.16, 1, 0.3, 1] as [number, number, number, number] 
           }}
-          className="grid grid-cols-1 lg:grid-cols-[45fr_55fr] gap-12 lg:gap-16 items-start"
+          className="grid grid-cols-1 lg:grid-cols-[45fr_55fr] gap-8 lg:gap-16 items-start"
         >
           {/* ── Left Side: Copy and details ── */}
           <div className="flex flex-col h-full justify-between lg:pr-6">
@@ -127,7 +127,7 @@ export default function CTABanner() {
               
               <h2
                 id="cta-heading"
-                className="font-serif text-[36px] sm:text-[48px] lg:text-[56px] leading-[1.08] tracking-[-0.02em] mb-6"
+                className="font-serif text-[28px] sm:text-[42px] lg:text-[56px] leading-[1.08] tracking-[-0.02em] mb-5"
                 style={{ color: "#FFFFFF" }}
               >
                 Let&rsquo;s Automate Your Overhead.
@@ -198,7 +198,7 @@ export default function CTABanner() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4">
                         {/* Name */}
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="name" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">
@@ -236,7 +236,7 @@ export default function CTABanner() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4">
                         {/* Company */}
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="company" className="text-[10px] font-bold tracking-wider text-white/60 uppercase">

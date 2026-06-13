@@ -41,13 +41,13 @@ export default function Metrics() {
     <section
       ref={ref}
       aria-label="orrange.ai metrics"
-      className="py-16 bg-[#FFFFFF] border-t border-[#E8E8E4] border-b border-[#E8E8E4]"
+      className="py-12 lg:py-16 bg-[#FFFFFF] border-t border-[#E8E8E4] border-b border-[#E8E8E4]"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         
         {/* Compact, punchy title */}
         <p
-          className="text-center font-sans text-[11px] font-bold tracking-[0.15em] text-[#E8500A] uppercase mb-12"
+          className="text-center font-sans text-[11px] font-bold tracking-[0.15em] text-[#E8500A] uppercase mb-8 lg:mb-12"
         >
           OPERATIONAL PROOF BY THE NUMBERS
         </p>
@@ -80,7 +80,7 @@ export default function Metrics() {
               >
                 {/* Enormous Number acting as a design element */}
                 <p
-                  className="font-serif text-[64px] sm:text-[80px] lg:text-[96px] font-bold leading-none tracking-[-0.03em] mb-2 text-[#E8500A]"
+                  className="font-serif text-[52px] sm:text-[80px] lg:text-[96px] font-bold leading-none tracking-[-0.03em] mb-2 text-[#E8500A]"
                   aria-live="polite"
                 >
                   {metric.value !== null ? (

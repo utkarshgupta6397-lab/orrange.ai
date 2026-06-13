@@ -47,16 +47,16 @@ export default function Footer() {
         initial={{ opacity: 0, y: 15 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-10"
+        className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-12 pb-8 lg:pt-16 lg:pb-10"
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand column */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-1 sm:col-span-2 md:col-span-1">
             <div className="mb-4">
               <OrrangeLogo className="h-[26px] sm:h-[28px] w-auto" isDarkTheme={false} />
             </div>
             <p
-              className="font-sans text-[13px] leading-relaxed mb-5 max-w-[200px]"
+              className="font-sans text-[13px] leading-relaxed mb-5 max-w-full sm:max-w-[200px]"
               style={{ color: "#9A9A93" }}
             >
               Building software systems that create measurable business outcomes.

@@ -353,16 +353,16 @@ export default function WhatWeBuilt() {
       ref={ref}
       aria-labelledby="built-heading"
       style={{ backgroundColor: "#F8F8F6" }}
-      className="py-24 lg:py-28"
+      className="py-14 lg:py-28"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-16">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 lg:mb-16">
           <div>
             <SectionLabel label="WHAT WE'VE BUILT" />
             <h2
               id="built-heading"
-              className="font-serif text-[32px] sm:text-[40px] lg:text-[48px] leading-[1.1] tracking-[-0.02em]"
+              className="font-serif text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.1] tracking-[-0.02em]"
               style={{ color: "#141412", maxWidth: "600px" }}
             >
               Software Shipped to Production
@@ -391,7 +391,7 @@ export default function WhatWeBuilt() {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
         >
           {BUILT_ITEMS.map((item, i) => (
             <ProductCard 

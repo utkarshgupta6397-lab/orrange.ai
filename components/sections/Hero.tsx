@@ -96,7 +96,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[90vh] lg:min-h-[calc(100vh-80px)] flex items-center pt-[100px] overflow-hidden"
+      className="relative lg:min-h-[calc(100vh-80px)] flex items-center pt-[80px] lg:pt-[100px] overflow-hidden"
       aria-labelledby="hero-heading"
       style={{ backgroundColor: "#FFFFFF" }}
     >
@@ -108,13 +108,13 @@ export default function Hero() {
 
       {/* Blurred orange bubble */}
       <div
-        className="absolute top-[5%] right-[2%] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#E8500A]/12 to-transparent blur-[120px] pointer-events-none z-0"
+        className="absolute top-[5%] right-[2%] w-[200px] h-[200px] lg:w-[500px] lg:h-[500px] rounded-full bg-gradient-to-br from-[#E8500A]/12 to-transparent blur-[60px] lg:blur-[120px] pointer-events-none z-0"
         aria-hidden="true"
       />
 
       {/* Warm secondary glow */}
       <div
-        className="absolute top-[20%] right-[18%] w-[350px] h-[350px] rounded-full bg-gradient-to-br from-[#FFBD2E]/8 to-transparent blur-[90px] pointer-events-none z-0"
+        className="hidden lg:block absolute top-[20%] right-[18%] w-[350px] h-[350px] rounded-full bg-gradient-to-br from-[#FFBD2E]/8 to-transparent blur-[90px] pointer-events-none z-0"
         aria-hidden="true"
       />
 
@@ -169,7 +169,7 @@ export default function Hero() {
           </div>
 
           {/* ── Right Column: Living Operations Graph ── */}
-          <div className="flex justify-center lg:justify-end order-first lg:order-last z-10 w-full">
+          <div className="flex justify-center lg:justify-end order-last z-10 w-full">
             <motion.div
               animate={
                 typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -178,7 +178,7 @@ export default function Hero() {
               }
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="w-full"
-              style={{ maxWidth: "860px" }}
+              style={{ maxWidth: "min(860px, 100%)" }}
             >
               <LivingOperationsGraph />
             </motion.div>

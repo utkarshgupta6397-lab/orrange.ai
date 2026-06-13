@@ -51,11 +51,11 @@ export default function Process() {
       id="process"
       aria-labelledby="process-heading"
       style={{ backgroundColor: "#F8F8F6" }}
-      className="py-24 lg:py-28"
+      className="py-14 lg:py-28"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-20">
+        <div className="mb-10 lg:mb-20">
           <SectionLabel label="ENGAGEMENT PLAYBOOK" />
           <h2
             id="process-heading"
@@ -127,7 +127,7 @@ export default function Process() {
               aria-hidden="true"
             />
 
-            <div className="space-y-10">
+            <div className="space-y-8">
               {PROCESS_STEPS.map((step, i) => (
                 <motion.div
                   key={step.number}
@@ -168,14 +168,14 @@ export default function Process() {
         </div>
 
         {/* ── Inline CTA ── */}
-        <div className="mt-20 border-t border-[#E8E8E4] pt-12 flex flex-col items-center justify-center text-center">
+        <div className="mt-12 lg:mt-20 border-t border-[#E8E8E4] pt-8 lg:pt-12 flex flex-col items-center justify-center text-center">
           <h3 className="font-serif text-[24px] sm:text-[28px] mb-4 text-[#141412]">
             Want to see who&apos;s building your systems?
           </h3>
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <button
               onClick={() => scrollTo("#about")}
-              className="flex items-center justify-center gap-2 font-sans text-[15px] font-semibold h-13 px-7 rounded-lg cursor-pointer transition-all duration-150 border border-[#E8E8E4] text-[#141412] bg-[#F8F8F6] hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] active:scale-[0.98] whitespace-nowrap"
+              className="flex items-center justify-center gap-2 font-sans text-[15px] font-semibold h-13 px-7 rounded-lg cursor-pointer transition-all duration-150 border border-[#E8E8E4] text-[#141412] bg-[#F8F8F6] hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] active:scale-[0.98] whitespace-nowrap w-full sm:w-auto"
               style={{
                 height: "52px",
                 paddingLeft: "28px",
@@ -186,7 +186,7 @@ export default function Process() {
             </button>
             <button
               onClick={() => scrollTo("#contact")}
-              className="flex items-center justify-center gap-2 font-sans text-[15px] font-semibold h-13 px-7 rounded-lg cursor-pointer transition-all duration-150 bg-[#E8500A] text-white hover:bg-[#D04508] hover:shadow-[0_4px_16px_rgba(232,80,10,0.2)] active:scale-[0.98] whitespace-nowrap"
+              className="flex items-center justify-center gap-2 font-sans text-[15px] font-semibold h-13 px-7 rounded-lg cursor-pointer transition-all duration-150 bg-[#E8500A] text-white hover:bg-[#D04508] hover:shadow-[0_4px_16px_rgba(232,80,10,0.2)] active:scale-[0.98] whitespace-nowrap w-full sm:w-auto"
               style={{
                 height: "52px",
                 paddingLeft: "28px",
